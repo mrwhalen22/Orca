@@ -10,3 +10,6 @@
 #else
 #error Hazel only supports Windows
 #endif
+
+// define for bitwise shifting for the event category class
+#define BIT(x) (1 << x)

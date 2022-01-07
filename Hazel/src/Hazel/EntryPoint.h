@@ -11,7 +11,7 @@ int main(int argc, char** argv) {
 
 	Hazel::Log::Init();
 	HZ_CORE_TRACE("Hazel Application Initialized...");
-	HZ_CLIENT_INFO("Welcome to your app!");
+	HZ_INFO("Welcome to your app!");
 
 	auto app = Hazel::CreateApplication();
 	app->Run();
