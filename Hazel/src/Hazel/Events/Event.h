@@ -1,11 +1,6 @@
 #pragma once
-
+#include "hzpch.h"
 #include "Hazel/Core.h"
-
-
-//Need to be moved to precompiled headers
-#include <string>
-#include <functional>
 
 namespace Hazel {
 

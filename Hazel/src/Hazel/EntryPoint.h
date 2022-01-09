@@ -2,8 +2,6 @@
 
 #ifdef HZ_PLATFORM_WINDOWS
 
-#include <iostream>
-
 // Allows client using Hazel to define their own application and use this as their entry point
 extern Hazel::Application* Hazel::CreateApplication();
 
