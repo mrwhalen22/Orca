@@ -22,3 +22,6 @@
 
 // define for bitwise shifting for the event category class
 #define BIT(x) (1 << x)
+
+//macro for binding functions
+#define HZ_BIND_EVENT_FN(fn) std::bind(&fn, this, std::placeholders::_1)
