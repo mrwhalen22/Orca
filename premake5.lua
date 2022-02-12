@@ -1,3 +1,5 @@
+
+-- defins out entire workspace as our solution in VS
 workspace "Hazel"
 	architecture "x64"
 
@@ -10,7 +12,7 @@ workspace "Hazel"
 	startproject "Sandbox"
 
 
-
+-- Defines the main output dir for files in Hazel/.../bin and Hazel/.../bin-int
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
 -- Include directories relative to root folder (solution directory)
@@ -18,6 +20,7 @@ IncludeDir = {}
 IncludeDir["GLFW"] = "Hazel/vendor/GLFW/include"
 IncludeDir["Glad"] = "Hazel/vendor/Glad/include"
 IncludeDir["imgui"] = "Hazel/vendor/imgui"
+IncludeDir["glm"] = "Hazel/vendor/glm"
 
 group "Dependencies"
 
@@ -40,7 +43,10 @@ project "Hazel"
 
 	files {
 		"%{prj.name}/src/**.h",
-		"%{prj.name}/src/**.cpp"
+		"%{prj.name}/src/**.cpp",
+		"%{prj.name}/vendor/glm/glm/**.hpp",
+		"%{prj.name}/vendor/glm/glm/**.inl"
+
 	}
 
 	includedirs {
@@ -48,7 +54,8 @@ project "Hazel"
 		"%{prj.name}/vendor/spdlog/include",
 		"%{IncludeDir.GLFW}",
 		"%{IncludeDir.Glad}",
-		"%{IncludeDir.imgui}"
+		"%{IncludeDir.imgui}",
+		"%{IncludeDir.glm}"
 	}
 
 	links {
@@ -107,7 +114,9 @@ project "Sandbox"
 
 	includedirs {
 		"Hazel/vendor/spdlog/include",
-		"Hazel/src"
+		"Hazel/src",
+		"%{IncludeDir.glm}",
+		"Hazel/vendor"
 	}
 
 	links {
