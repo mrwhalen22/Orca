@@ -1,5 +1,5 @@
 
--- defins out entire workspace as our solution in VS
+-- defines our entire workspace as our solution in VS
 workspace "Hazel"
 	architecture "x64"
 
@@ -32,8 +32,10 @@ group ""
 
 project "Hazel"
 	location "Hazel"
-	kind "SharedLib"
+	kind "StaticLib"
 	language "C++"
+	cppdialect "C++17"
+	staticruntime "on"
 
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
@@ -64,37 +66,28 @@ project "Hazel"
 	}
 
 	filter "system:windows"
-		cppdialect "C++17"
-		staticruntime "off"
 		systemversion "latest"
 
 		defines {
 			"HZ_PLATFORM_WINDOWS",
 			"HZ_BUILD_DLL",
-			"GLFW_INCLUDE_NONE",
-			"IMGUI_IMPL_OPENGL_LOADER_CUSTOM"
-		}
-
-		postbuildcommands {
-			("IF NOT EXIST ../bin/" .. outputdir .. "/Sandbox mkdir ../bin/" .. outputdir .. "/Sandbox"),
-			("{COPY} %{cfg.buildtarget.relpath} ../bin/" .. outputdir .. "/Sandbox")
+			"GLFW_INCLUDE_NONE"
 		}
 
 	filter "configurations:Debug"
-		defines "HZ_ENABLE_ASSERTS"
 		defines "HZ_DEBUG"
 		runtime "Debug"
-		symbols "On"
+		symbols "on"
 
 	filter "configurations:Release"
 		defines "HZ_RELEASE"
 		runtime "Release"
-		optimize "On"
+		optimize "on"
 
 	filter "configurations:Dist"
 		defines "HZ_DIST"
 		runtime "Release"
-		optimize "On"
+		optimize "on"
 
 
 
@@ -103,6 +96,10 @@ project "Sandbox"
 	location "Sandbox"
 	kind "ConsoleApp"
 	language "C++"
+	cppdialect "C++17"
+	
+
+	staticruntime "on"
 
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
@@ -124,26 +121,22 @@ project "Sandbox"
 	}
 
 	filter "system:windows"
-		cppdialect "C++17"
-		staticruntime "off"
 		systemversion "latest"
-
 		defines {
 			"HZ_PLATFORM_WINDOWS",
 		}
 
 	filter "configurations:Debug"
-		defines "HZ_ENABLE_ASSERTS"
 		defines "HZ_DEBUG"
 		runtime "Debug"
-		symbols "On"
+		symbols "on"
 
 	filter "configurations:Release"
 		defines "HZ_RELEASE"
 		runtime "Release"
-		optimize "On"
+		optimize "on"
 
 	filter "configurations:Dist"
 		defines "HZ_DIST"
 		runtime "Release"
-		optimize "On"
+		optimize "on"

@@ -1,8 +1,6 @@
 #include <iostream>
 #include <Hazel.h>
 
-#include "imgui/imgui.h"
-
 class ExampleLayer : public Hazel::Layer {
 public:
 	ExampleLayer()
@@ -10,8 +8,6 @@ public:
 	{}
 
 	void OnImGuiRender() override {
-		ImGui::Begin("Test");
-		ImGui::End();
 	}
 
 	void OnUpdate() override {
