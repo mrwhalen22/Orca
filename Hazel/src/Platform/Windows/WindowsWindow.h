@@ -1,7 +1,9 @@
 #pragma once
 #include "Hazel/Window.h"
 #include "Hazel/Log.h"
+#include "Hazel/Renderer/GraphicsContext.h"
 #include <GLFW/glfw3.h>
+
 
 namespace Hazel {
 
@@ -33,14 +35,15 @@ namespace Hazel {
 
 		struct WindowData {
 			std::string Title;
-			unsigned int Width, Height;
-			bool VSync;
+			unsigned int Width = 0, Height = 0;
+			bool VSync = false;
 
 			EventCallbackFn EventCallback;
 
 		};
 
 		WindowData m_Data;
+		GraphicsContext* m_Context;
 
 	};
 
