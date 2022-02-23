@@ -30,6 +30,9 @@ namespace Hazel {
 		bool OnWindowClose(WindowCloseEvent& e);
 
 		static Application* s_Instance;
+
+		unsigned int m_Vbuf, m_Varr, m_Ibuf;
+
 		std::unique_ptr<Window> m_Window;
 		ImGuiLayer* m_ImGuiLayer;
 		bool m_Running = true;
