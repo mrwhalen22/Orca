@@ -8,6 +8,8 @@
 
 #include "Hazel/ImGui/ImGuiLayer.h"
 
+#include "Hazel/Renderer/Shader.h"
+
 
 namespace Hazel {
 	class HAZEL_API Application
@@ -32,6 +34,7 @@ namespace Hazel {
 		static Application* s_Instance;
 
 		unsigned int m_Vbuf, m_Varr, m_Ibuf;
+		std::unique_ptr<Shader> m_Shader;
 
 		std::unique_ptr<Window> m_Window;
 		ImGuiLayer* m_ImGuiLayer;
