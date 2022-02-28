@@ -4,7 +4,7 @@
 
 namespace Hazel {
 
-	class HAZEL_API Shader {
+	class Shader {
 
 	public:
 		Shader(const std::string& vertexSrc, const std::string& fragmentSrc);

@@ -32,7 +32,7 @@ namespace Hazel {
 
 
 
-	class HAZEL_API Event {
+	class Event {
 		friend class EventDispatcher;
 	public:
 		virtual EventType GetEventType() const = 0;
