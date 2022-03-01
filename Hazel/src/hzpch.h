@@ -1,5 +1,7 @@
 #pragma once
 
+// This is Hazel's Precompiled Header to be included in every Hazel .cpp file
+
 #include <iostream>
 #include <memory>
 #include <functional>

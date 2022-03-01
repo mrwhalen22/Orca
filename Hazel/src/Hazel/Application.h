@@ -32,17 +32,23 @@ namespace Hazel {
 	private:
 		bool OnWindowClose(WindowCloseEvent& e);
 
+		// Singleton
 		static Application* s_Instance;
 
+		// Renderer vars
 		unsigned int m_Varr;
 		std::unique_ptr<Shader> m_Shader;
 		std::unique_ptr<VertexBuffer> m_VertexBuffer;
 		std::unique_ptr<IndexBuffer> m_IndexBuffer;
 
+		// Window Ref
 		std::unique_ptr<Window> m_Window;
+		// Single ImGui Layer and Layer Stack
 		ImGuiLayer* m_ImGuiLayer;
-		bool m_Running = true;
 		LayerStack m_LayerStack;
+
+		bool m_Running = true;
+		
 
 	};
 
