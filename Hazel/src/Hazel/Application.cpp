@@ -4,7 +4,7 @@
 #include "Hazel/Log.h"
 #include "Hazel/Input.h"
 
-
+#include "Hazel/MouseButtonCodes.h"
 
 #include <glad/glad.h>
 
@@ -39,7 +39,6 @@ namespace Hazel {
 
 	}
 
-
 	// Define Application Singleton IE: Only one object instance of Application
 	Application* Application::s_Instance = nullptr;
 
@@ -52,8 +51,8 @@ namespace Hazel {
 		m_ImGuiLayer = new ImGuiLayer;
 		PushOverlay(m_ImGuiLayer);
 
-		glGenVertexArrays(1, &m_Varr);
-		glBindVertexArray(m_Varr);
+		m_VertexArray.reset(VertexArray::Create());
+		m_VertexArray->Bind();
 
 
 		float vertices[] = {
@@ -73,20 +72,41 @@ namespace Hazel {
 			};
 			m_VertexBuffer->SetLayout(layout);
 		}
-		uint32_t index = 0;
-		for (const auto& element : m_VertexBuffer->GetLayout()) {
-			glEnableVertexAttribArray(index);
-			glVertexAttribPointer(index, element.GetComponentCount(), 
-				ShaderDataTypeToOpenGLBaseType(element.type), element.normalized ? GL_TRUE : GL_FALSE, 
-				m_VertexBuffer->GetLayout().GetStride(), (const void*)element.offset);
-			index++;
+		
+
+
+		unsigned int triangleIndices[] = { 0, 1, 2};
+		m_IndexBuffer.reset(IndexBuffer::Create(triangleIndices, 3));
+
+		m_VertexArray->AddVertexBuffer(m_VertexBuffer);
+		m_VertexArray->SetIndexBuffer(m_IndexBuffer);
+		m_VertexArray->Unbind();
+		
+		m_SquareVA.reset(VertexArray::Create());
+		std::shared_ptr<VertexBuffer> squareVB;
+		squareVB.reset(VertexBuffer::Create(vertices, sizeof(vertices)));
+
+		{
+			BufferLayout layout = {
+				{ ShaderDataType::Float3, "a_Position"},
+				{ ShaderDataType::Float4, "a_Color" }
+
+			};
+			squareVB->SetLayout(layout);
 		}
 
 
-		unsigned int indices[] = { 0, 1, 2, 2, 3, 0 };
-		m_IndexBuffer.reset(IndexBuffer::Create(indices, 6));
-		
-		
+		unsigned int squareIndices[] = { 0, 1, 2, 2, 3, 0 };
+		std::shared_ptr<IndexBuffer> squareIB;
+		squareIB.reset(IndexBuffer::Create(squareIndices, 6));
+
+		m_SquareVA->AddVertexBuffer(squareVB);
+		m_SquareVA->SetIndexBuffer(squareIB);
+
+
+
+
+
 
 		std::string vertexSrc = R"(
 			#version 410 core
@@ -168,11 +188,16 @@ namespace Hazel {
 
 
 			m_Shader->Bind();
-			glBindVertexArray(m_Varr);
 
 
-			glDrawElements(GL_TRIANGLES, m_IndexBuffer->GetCount(), GL_UNSIGNED_INT, nullptr);
-
+			if (Hazel::Input::IsMouseButtonPressed(GLFW_MOUSE_BUTTON_LEFT)) {
+				m_VertexArray->Bind();
+				glDrawElements(GL_TRIANGLES, m_VertexArray->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
+			}
+			else {
+				m_SquareVA->Bind();
+				glDrawElements(GL_TRIANGLES, m_SquareVA->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
+			}
 			// Updates every layer
 			for (Layer* layer : m_LayerStack)
 				layer->OnUpdate();

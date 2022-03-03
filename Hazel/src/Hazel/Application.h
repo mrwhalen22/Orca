@@ -10,6 +10,7 @@
 
 #include "Hazel/Renderer/Shader.h"
 #include "Hazel/Renderer/Buffer.h"
+#include "Hazel/Renderer/VertexArray.h"
 
 
 namespace Hazel {
@@ -36,10 +37,14 @@ namespace Hazel {
 		static Application* s_Instance;
 
 		// Renderer vars
-		unsigned int m_Varr;
-		std::unique_ptr<Shader> m_Shader;
-		std::unique_ptr<VertexBuffer> m_VertexBuffer;
-		std::unique_ptr<IndexBuffer> m_IndexBuffer;
+		std::shared_ptr<VertexArray> m_VertexArray;
+		std::shared_ptr<Shader> m_Shader;
+		std::shared_ptr<VertexBuffer> m_VertexBuffer;
+		std::shared_ptr<IndexBuffer> m_IndexBuffer;
+
+		std::shared_ptr<VertexArray> m_SquareVA;
+
+		
 
 		// Window Ref
 		std::unique_ptr<Window> m_Window;
