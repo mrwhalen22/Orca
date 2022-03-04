@@ -5,9 +5,11 @@
 #include "Hazel/Log.h"
 
 #include "Hazel/MouseButtonCodes.h"
+#include "Hazel/KeyCodes.h"
 
 
 #include "Renderer/Renderer.h"
+#include "Hazel/Renderer/OrthographicCamera.h"
 
 
 namespace Hazel
@@ -19,6 +21,7 @@ namespace Hazel
 	Application* Application::s_Instance = nullptr;
 
 	Application::Application()
+		: m_Camera(-1.6f, 1.6f, -0.9f, 0.9f)
 	{
 		s_Instance = this;
 
@@ -33,10 +36,10 @@ namespace Hazel
 
 
 		float vertices[] = {
-			-0.75f, -0.75f, 0.0f, 0.9f, 0.7f, 0.1f, 1.0f,
-			0.75f, -0.75f, 0.0f, 0.9f, 0.1f, 0.1f, 1.0f,
-			0.75f, 0.75f, 0.0f, 0.9f, 0.1f, 0.9f, 1.0f,
-			-0.75f, 0.75f, 0.0f, 0.1f, 0.1f, 0.9f, 1.0f,
+			-0.75f, -0.75f, 0.0f,	0.9f, 0.7f, 0.1f, 1.0f,
+			 0.75f, -0.75f, 0.0f,	0.9f, 0.1f, 0.1f, 1.0f,
+			 0.75f,  0.75f,	0.0f,	0.9f, 0.1f, 0.9f, 1.0f,
+			-0.75f,  0.75f,	0.0f,	0.1f, 0.1f, 0.9f, 1.0f,
 		};
 
 		m_VertexBuffer.reset(VertexBuffer::Create(vertices, sizeof(vertices)));
@@ -86,13 +89,15 @@ namespace Hazel
 			layout(location = 0) in vec3 a_Position;
 			layout(location = 1) in vec4 a_Color;			
 
+			uniform mat4 u_VPMatrix;
+
 			out vec3 v_Position;
 			out vec4 v_Color;
 	
 			void main() {
 				v_Position = a_Position;
 				v_Color = a_Color;
-				gl_Position = vec4(a_Position, 1.0);
+				gl_Position = u_VPMatrix * vec4(a_Position, 1.0);
 			}	
 			
 		)";
@@ -156,16 +161,29 @@ namespace Hazel
 	// Updates and Renders Layers
 	void Application::Run()
 	{
+
+		glm::vec3 pos = { 0,0,0 };
+		float rot = 0.0f;
 		while (m_Running)
 		{
+			if (Input::IsKeyPressed(HZ_KEY_W)) pos = pos + glm::vec3(0, 0.1f, 0);
+			if (Input::IsKeyPressed(HZ_KEY_A)) pos = pos + glm::vec3(-0.1f, 0, 0);
+			if (Input::IsKeyPressed(HZ_KEY_S)) pos = pos + glm::vec3(0, -0.1f, 0);
+			if (Input::IsKeyPressed(HZ_KEY_D)) pos = pos + glm::vec3(0.1f, 0, 0);
+			if (Input::IsKeyPressed(HZ_KEY_Q)) rot += -1;
+			if (Input::IsKeyPressed(HZ_KEY_E)) rot += 1;
+
+
 			RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
 			RenderCommand::Clear();
 
 
-			m_Shader->Bind();
 
-			Renderer::BeginScene();
-			Renderer::Submit(m_SquareVA);
+			m_Camera.SetPosition(pos);
+			m_Camera.SetRotation(rot);
+
+			Renderer::BeginScene(m_Camera);
+			Renderer::Submit(m_SquareVA, m_Shader);
 			Renderer::EndScene();
 
 			// Updates every layer
