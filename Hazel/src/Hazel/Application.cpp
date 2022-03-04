@@ -1,48 +1,25 @@
 #include "hzpch.h"
 
 #include "Hazel/Application.h"
-#include "Hazel/Log.h"
 #include "Hazel/Input.h"
+#include "Hazel/Log.h"
 
 #include "Hazel/MouseButtonCodes.h"
 
-#include <glad/glad.h>
+
+#include "Renderer/Renderer.h"
 
 
-namespace Hazel {
-
+namespace Hazel
+{
 	// Binds an Event type as an event function to be handled
-	#define BIND_EVENT_FN(x) std::bind(&x, this, std::placeholders::_1)
-
-	static GLenum ShaderDataTypeToOpenGLBaseType(ShaderDataType type) {
-		switch (type) {
-		case ShaderDataType::None:		return 0;
-		case ShaderDataType::Float:		return GL_FLOAT;
-		case ShaderDataType::Float2:	return GL_FLOAT;
-		case ShaderDataType::Float3:	return GL_FLOAT;
-		case ShaderDataType::Float4:	return GL_FLOAT;
-
-		case ShaderDataType::Int:		return GL_INT;
-		case ShaderDataType::Int2:		return GL_INT;
-		case ShaderDataType::Int3:		return GL_INT;
-		case ShaderDataType::Int4:		return GL_INT;
-
-		case ShaderDataType::Mat3:		return GL_FLOAT;
-		case ShaderDataType::Mat4:		return GL_FLOAT;
-		case ShaderDataType::Bool:		return GL_BOOL;
-
-			HZ_CORE_ASSERT(false, "Unknown ShaderDataType!");
-			return 0;
-
-
-		}
-
-	}
+#define BIND_EVENT_FN(x) std::bind(&x, this, std::placeholders::_1)
 
 	// Define Application Singleton IE: Only one object instance of Application
 	Application* Application::s_Instance = nullptr;
 
-	Application::Application() {
+	Application::Application()
+	{
 		s_Instance = this;
 
 		m_Window = std::unique_ptr<Window>(Window::Create());
@@ -56,56 +33,51 @@ namespace Hazel {
 
 
 		float vertices[] = {
-			-0.75f, -0.75f,  0.0f,  0.9f, 0.7f, 0.1f, 1.0f,
-			 0.75f, -0.75f,  0.0f,  0.9f, 0.1f, 0.1f, 1.0f,
-			 0.75f,  0.75f,  0.0f,  0.9f, 0.1f, 0.9f, 1.0f,
-			-0.75f,  0.75f,  0.0f,  0.1f, 0.1f, 0.9f, 1.0f,
+			-0.75f, -0.75f, 0.0f, 0.9f, 0.7f, 0.1f, 1.0f,
+			0.75f, -0.75f, 0.0f, 0.9f, 0.1f, 0.1f, 1.0f,
+			0.75f, 0.75f, 0.0f, 0.9f, 0.1f, 0.9f, 1.0f,
+			-0.75f, 0.75f, 0.0f, 0.1f, 0.1f, 0.9f, 1.0f,
 		};
 
 		m_VertexBuffer.reset(VertexBuffer::Create(vertices, sizeof(vertices)));
 
 		{
 			BufferLayout layout = {
-				{ ShaderDataType::Float3, "a_Position"},
-				{ ShaderDataType::Float4, "a_Color" }
+				{ShaderDataType::Float3, "a_Position"},
+				{ShaderDataType::Float4, "a_Color"}
 
 			};
 			m_VertexBuffer->SetLayout(layout);
 		}
-		
 
 
-		unsigned int triangleIndices[] = { 0, 1, 2};
+		unsigned int triangleIndices[] = {0, 1, 2};
 		m_IndexBuffer.reset(IndexBuffer::Create(triangleIndices, 3));
 
 		m_VertexArray->AddVertexBuffer(m_VertexBuffer);
 		m_VertexArray->SetIndexBuffer(m_IndexBuffer);
 		m_VertexArray->Unbind();
-		
+
 		m_SquareVA.reset(VertexArray::Create());
 		std::shared_ptr<VertexBuffer> squareVB;
 		squareVB.reset(VertexBuffer::Create(vertices, sizeof(vertices)));
 
 		{
 			BufferLayout layout = {
-				{ ShaderDataType::Float3, "a_Position"},
-				{ ShaderDataType::Float4, "a_Color" }
+				{ShaderDataType::Float3, "a_Position"},
+				{ShaderDataType::Float4, "a_Color"}
 
 			};
 			squareVB->SetLayout(layout);
 		}
 
 
-		unsigned int squareIndices[] = { 0, 1, 2, 2, 3, 0 };
+		unsigned int squareIndices[] = {0, 1, 2, 2, 3, 0};
 		std::shared_ptr<IndexBuffer> squareIB;
 		squareIB.reset(IndexBuffer::Create(squareIndices, 6));
 
 		m_SquareVA->AddVertexBuffer(squareVB);
 		m_SquareVA->SetIndexBuffer(squareIB);
-
-
-
-
 
 
 		std::string vertexSrc = R"(
@@ -141,32 +113,32 @@ namespace Hazel {
 
 
 		m_Shader.reset(new Shader(vertexSrc, fragmentSrc));
-
-
-	
 	}
 
-	Application::~Application() {
-
+	Application::~Application()
+	{
 	}
 
-
-	void Application::PushLayer(Layer* layer) {
+	void Application::PushLayer(Layer* layer)
+	{
 		m_LayerStack.PushLayer(layer);
 		layer->OnAttach();
 	}
 
-	void Application::PushOverlay(Layer* overlay) {
+	void Application::PushOverlay(Layer* overlay)
+	{
 		m_LayerStack.PushOverlay(overlay);
 		overlay->OnAttach();
 	}
 
 	// Sends Events to the event dispatcher to handle each event
-	void Application::OnEvent(Event& e) {
+	void Application::OnEvent(Event& e)
+	{
 		EventDispatcher dispatcher(e);
 		dispatcher.Dispatch<WindowCloseEvent>(BIND_EVENT_FN(Application::OnWindowClose));
 
-		for (auto it = m_LayerStack.end(); it != m_LayerStack.begin(); ) {
+		for (auto it = m_LayerStack.end(); it != m_LayerStack.begin();)
+		{
 			(*--it)->OnEvent(e);
 			if (e.IsHandled())
 				break;
@@ -174,30 +146,28 @@ namespace Hazel {
 	}
 
 	// Exit for Application
-	bool Application::OnWindowClose(WindowCloseEvent& e) {
+	bool Application::OnWindowClose(WindowCloseEvent& e)
+	{
 		m_Running = false;
 		return true;
 	}
 
 	// Main loop for application
 	// Updates and Renders Layers
-	void Application::Run() {
-		while (m_Running) {
-			glClearColor(0.1f, 0.1f, 0.1f, 1);
-			glClear(GL_COLOR_BUFFER_BIT);
+	void Application::Run()
+	{
+		while (m_Running)
+		{
+			RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
+			RenderCommand::Clear();
 
 
 			m_Shader->Bind();
 
+			Renderer::BeginScene();
+			Renderer::Submit(m_SquareVA);
+			Renderer::EndScene();
 
-			if (Hazel::Input::IsMouseButtonPressed(GLFW_MOUSE_BUTTON_LEFT)) {
-				m_VertexArray->Bind();
-				glDrawElements(GL_TRIANGLES, m_VertexArray->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
-			}
-			else {
-				m_SquareVA->Bind();
-				glDrawElements(GL_TRIANGLES, m_SquareVA->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
-			}
 			// Updates every layer
 			for (Layer* layer : m_LayerStack)
 				layer->OnUpdate();
