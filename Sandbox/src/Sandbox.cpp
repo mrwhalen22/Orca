@@ -1,20 +1,22 @@
 #include <iostream>
 #include <Hazel.h>
 
+#include <glm/gtc/matrix_transform.hpp>
+
 class ExampleLayer : public Hazel::Layer {
 public:
 	ExampleLayer()
-		:Layer("Example"), m_Camera(-3.2f, 3.2f, -1.8f, 1.8f), pos(0.0f)
+		:Layer("Example"), m_Camera(-3.2f, 3.2f, -1.8f, 1.8f), pos(0.0f), m_CameraSpeed(5.0f), m_Transform(0.0f)
 	{
 		m_VertexArray.reset(Hazel::VertexArray::Create());
 		m_VertexArray->Bind();
 
 
 		float vertices[] = {
-			-0.75f, -0.75f, 0.0f,	0.9f, 0.7f, 0.1f, 1.0f,
-			 0.75f, -0.75f, 0.0f,	0.9f, 0.1f, 0.1f, 1.0f,
-			 0.75f,  0.75f,	0.0f,	0.9f, 0.1f, 0.9f, 1.0f,
-			-0.75f,  0.75f,	0.0f,	0.1f, 0.1f, 0.9f, 1.0f,
+			-1.0f, -1.0f, 0.0f,	0.9f, 0.7f, 0.1f, 1.0f,
+			 1.0f, -1.0f, 0.0f,	0.9f, 0.1f, 0.1f, 1.0f,
+			 1.0f,  1.0f,	0.0f,	0.9f, 0.1f, 0.9f, 1.0f,
+			-1.0f,  1.0f,	0.0f,	0.1f, 0.1f, 0.9f, 1.0f,
 		};
 
 		m_VertexBuffer.reset(Hazel::VertexBuffer::Create(vertices, sizeof(vertices)));
@@ -65,6 +67,7 @@ public:
 			layout(location = 1) in vec4 a_Color;			
 
 			uniform mat4 u_VPMatrix;
+			uniform mat4 u_Transform;
 
 			out vec3 v_Position;
 			out vec4 v_Color;
@@ -72,7 +75,7 @@ public:
 			void main() {
 				v_Position = a_Position;
 				v_Color = a_Color;
-				gl_Position = u_VPMatrix * vec4(a_Position, 1.0);
+				gl_Position = u_VPMatrix * u_Transform * vec4(a_Position, 1.0);
 			}	
 			
 		)";
@@ -100,45 +103,50 @@ public:
 	void OnImGuiRender() override {
 	}
 
-	void OnUpdate() override {
+	void OnUpdate(Hazel::Timestep ts) override {
 		Hazel::RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
 		Hazel::RenderCommand::Clear();
 
-		if (Hazel::Input::IsKeyPressed(HZ_KEY_UP)) pos.y += 0.05f;
-		else if (Hazel::Input::IsKeyPressed(HZ_KEY_DOWN)) pos.y -= 0.05f;
-		if (Hazel::Input::IsKeyPressed(HZ_KEY_RIGHT)) pos.x += 0.05f;
-		else if (Hazel::Input::IsKeyPressed(HZ_KEY_LEFT)) pos.x -= 0.05f;
+		if (Hazel::Input::IsKeyPressed(HZ_KEY_UP)) pos.y += m_CameraSpeed * ts;
+		else if (Hazel::Input::IsKeyPressed(HZ_KEY_DOWN)) pos.y -= m_CameraSpeed * ts;
+		if (Hazel::Input::IsKeyPressed(HZ_KEY_RIGHT)) pos.x += m_CameraSpeed * ts;
+		else if (Hazel::Input::IsKeyPressed(HZ_KEY_LEFT)) pos.x -= m_CameraSpeed * ts;
 
-		if (Hazel::Input::IsKeyPressed(HZ_KEY_Q)) rot -= 2.0f;
-		else if (Hazel::Input::IsKeyPressed(HZ_KEY_E)) rot += 2.0f;
+		if (Hazel::Input::IsKeyPressed(HZ_KEY_Q)) rot -= m_CameraSpeed * 3 * ts;
+		else if (Hazel::Input::IsKeyPressed(HZ_KEY_E)) rot += m_CameraSpeed * 3  * ts;
+
+		if (Hazel::Input::IsKeyPressed(HZ_KEY_W)) m_Transform.y += m_CameraSpeed * ts;
+		else if (Hazel::Input::IsKeyPressed(HZ_KEY_S)) m_Transform.y -= m_CameraSpeed * ts;
+		if (Hazel::Input::IsKeyPressed(HZ_KEY_D)) m_Transform.x += m_CameraSpeed * ts;
+		else if (Hazel::Input::IsKeyPressed(HZ_KEY_A)) m_Transform.x -= m_CameraSpeed * ts;
 
 		if(Hazel::Input::IsKeyPressed(HZ_KEY_R))
 		{
 			pos = { 0,0,0 };
 			rot = 0;
+			m_Transform = { 0,0,0 };
 		}
 
+		glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.2f));
 
 		m_Camera.SetPosition(pos);
 		m_Camera.SetRotation(rot);
 
 		Hazel::Renderer::BeginScene(m_Camera);
-		Hazel::Renderer::Submit(m_SquareVA, m_Shader);
+		for(int i = 0; i < 30; i++)
+		{
+			for (int j = 0; j < 30; j++) {
+				glm::vec3 pos(i * 0.5, j * 0.5, 0);
+				glm::mat4 transform = glm::translate(glm::mat4(1.0f), pos) * scale;
+				Hazel::Renderer::Submit(m_SquareVA, m_Shader, transform);
+			}
+		}
 		Hazel::Renderer::EndScene();
 	}
 
 	void OnEvent(Hazel::Event& event) override {
-		Hazel::EventDispatcher dispatcher(event);
-		dispatcher.Dispatch<Hazel::KeyPressedEvent>(HZ_BIND_EVENT_FN(ExampleLayer::OnKeyPressedEvent));
 	}
 
-	bool OnKeyPressedEvent(Hazel::KeyPressedEvent& event)
-	{
-		
-
-
-		return false;
-	}
 
 private:
 	// Renderer vars
@@ -150,9 +158,12 @@ private:
 	std::shared_ptr<Hazel::VertexArray> m_SquareVA;
 
 	Hazel::OrthographicCamera m_Camera;
+	float m_CameraSpeed;
 
 	glm::vec3 pos;
 	float rot = 0.0f;
+
+	glm::vec3 m_Transform;
 
 };
 
