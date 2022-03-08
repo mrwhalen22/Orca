@@ -1,14 +1,14 @@
 #include <iostream>
-#include <Hazel.h>
+#include <Orca.h>
 
 #include <glm/gtc/matrix_transform.hpp>
 
-class ExampleLayer : public Hazel::Layer {
+class ExampleLayer : public Orca::Layer {
 public:
 	ExampleLayer()
 		:Layer("Example"), m_Camera(-3.2f, 3.2f, -1.8f, 1.8f), pos(0.0f), m_CameraSpeed(5.0f), m_Transform(0.0f)
 	{
-		m_VertexArray.reset(Hazel::VertexArray::Create());
+		m_VertexArray.reset(Orca::VertexArray::Create());
 		m_VertexArray->Bind();
 
 
@@ -19,12 +19,12 @@ public:
 			-1.0f,  1.0f,	0.0f,	0.1f, 0.1f, 0.9f, 1.0f,
 		};
 
-		m_VertexBuffer.reset(Hazel::VertexBuffer::Create(vertices, sizeof(vertices)));
+		m_VertexBuffer.reset(Orca::VertexBuffer::Create(vertices, sizeof(vertices)));
 
 		{
-			Hazel::BufferLayout layout = {
-				{Hazel::ShaderDataType::Float3, "a_Position"},
-				{Hazel::ShaderDataType::Float4, "a_Color"}
+			Orca::BufferLayout layout = {
+				{Orca::ShaderDataType::Float3, "a_Position"},
+				{Orca::ShaderDataType::Float4, "a_Color"}
 
 			};
 			m_VertexBuffer->SetLayout(layout);
@@ -32,20 +32,20 @@ public:
 
 
 		unsigned int triangleIndices[] = { 0, 1, 2 };
-		m_IndexBuffer.reset(Hazel::IndexBuffer::Create(triangleIndices, 3));
+		m_IndexBuffer.reset(Orca::IndexBuffer::Create(triangleIndices, 3));
 
 		m_VertexArray->AddVertexBuffer(m_VertexBuffer);
 		m_VertexArray->SetIndexBuffer(m_IndexBuffer);
 		m_VertexArray->Unbind();
 
-		m_SquareVA.reset(Hazel::VertexArray::Create());
-		std::shared_ptr<Hazel::VertexBuffer> squareVB;
-		squareVB.reset(Hazel::VertexBuffer::Create(vertices, sizeof(vertices)));
+		m_SquareVA.reset(Orca::VertexArray::Create());
+		std::shared_ptr<Orca::VertexBuffer> squareVB;
+		squareVB.reset(Orca::VertexBuffer::Create(vertices, sizeof(vertices)));
 
 		{
-			Hazel::BufferLayout layout = {
-				{Hazel::ShaderDataType::Float3, "a_Position"},
-				{Hazel::ShaderDataType::Float4, "a_Color"}
+			Orca::BufferLayout layout = {
+				{Orca::ShaderDataType::Float3, "a_Position"},
+				{Orca::ShaderDataType::Float4, "a_Color"}
 
 			};
 			squareVB->SetLayout(layout);
@@ -53,8 +53,8 @@ public:
 
 
 		unsigned int squareIndices[] = { 0, 1, 2, 2, 3, 0 };
-		std::shared_ptr<Hazel::IndexBuffer> squareIB;
-		squareIB.reset(Hazel::IndexBuffer::Create(squareIndices, 6));
+		std::shared_ptr<Orca::IndexBuffer> squareIB;
+		squareIB.reset(Orca::IndexBuffer::Create(squareIndices, 6));
 
 		m_SquareVA->AddVertexBuffer(squareVB);
 		m_SquareVA->SetIndexBuffer(squareIB);
@@ -95,7 +95,7 @@ public:
 		)";
 
 
-		m_Shader.reset(new Hazel::Shader(vertexSrc, fragmentSrc));
+		m_Shader.reset(new Orca::Shader(vertexSrc, fragmentSrc));
 
 
 	}
@@ -103,24 +103,24 @@ public:
 	void OnImGuiRender() override {
 	}
 
-	void OnUpdate(Hazel::Timestep ts) override {
-		Hazel::RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
-		Hazel::RenderCommand::Clear();
+	void OnUpdate(Orca::Timestep ts) override {
+		Orca::RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
+		Orca::RenderCommand::Clear();
 
-		if (Hazel::Input::IsKeyPressed(HZ_KEY_UP)) pos.y += m_CameraSpeed * ts;
-		else if (Hazel::Input::IsKeyPressed(HZ_KEY_DOWN)) pos.y -= m_CameraSpeed * ts;
-		if (Hazel::Input::IsKeyPressed(HZ_KEY_RIGHT)) pos.x += m_CameraSpeed * ts;
-		else if (Hazel::Input::IsKeyPressed(HZ_KEY_LEFT)) pos.x -= m_CameraSpeed * ts;
+		if (Orca::Input::IsKeyPressed(OA_KEY_UP)) pos.y += m_CameraSpeed * ts;
+		else if (Orca::Input::IsKeyPressed(OA_KEY_DOWN)) pos.y -= m_CameraSpeed * ts;
+		if (Orca::Input::IsKeyPressed(OA_KEY_RIGHT)) pos.x += m_CameraSpeed * ts;
+		else if (Orca::Input::IsKeyPressed(OA_KEY_LEFT)) pos.x -= m_CameraSpeed * ts;
 
-		if (Hazel::Input::IsKeyPressed(HZ_KEY_Q)) rot -= m_CameraSpeed * 3 * ts;
-		else if (Hazel::Input::IsKeyPressed(HZ_KEY_E)) rot += m_CameraSpeed * 3  * ts;
+		if (Orca::Input::IsKeyPressed(OA_KEY_Q)) rot -= m_CameraSpeed * 3 * ts;
+		else if (Orca::Input::IsKeyPressed(OA_KEY_E)) rot += m_CameraSpeed * 3  * ts;
 
-		if (Hazel::Input::IsKeyPressed(HZ_KEY_W)) m_Transform.y += m_CameraSpeed * ts;
-		else if (Hazel::Input::IsKeyPressed(HZ_KEY_S)) m_Transform.y -= m_CameraSpeed * ts;
-		if (Hazel::Input::IsKeyPressed(HZ_KEY_D)) m_Transform.x += m_CameraSpeed * ts;
-		else if (Hazel::Input::IsKeyPressed(HZ_KEY_A)) m_Transform.x -= m_CameraSpeed * ts;
+		if (Orca::Input::IsKeyPressed(OA_KEY_W)) m_Transform.y += m_CameraSpeed * ts;
+		else if (Orca::Input::IsKeyPressed(OA_KEY_S)) m_Transform.y -= m_CameraSpeed * ts;
+		if (Orca::Input::IsKeyPressed(OA_KEY_D)) m_Transform.x += m_CameraSpeed * ts;
+		else if (Orca::Input::IsKeyPressed(OA_KEY_A)) m_Transform.x -= m_CameraSpeed * ts;
 
-		if(Hazel::Input::IsKeyPressed(HZ_KEY_R))
+		if(Orca::Input::IsKeyPressed(OA_KEY_R))
 		{
 			pos = { 0,0,0 };
 			rot = 0;
@@ -132,32 +132,33 @@ public:
 		m_Camera.SetPosition(pos);
 		m_Camera.SetRotation(rot);
 
-		Hazel::Renderer::BeginScene(m_Camera);
+		Orca::Renderer::BeginScene(m_Camera);
 		for(int i = 0; i < 30; i++)
 		{
 			for (int j = 0; j < 30; j++) {
 				glm::vec3 pos(i * 0.5, j * 0.5, 0);
+				pos += m_Transform;
 				glm::mat4 transform = glm::translate(glm::mat4(1.0f), pos) * scale;
-				Hazel::Renderer::Submit(m_SquareVA, m_Shader, transform);
+				Orca::Renderer::Submit(m_SquareVA, m_Shader, transform);
 			}
 		}
-		Hazel::Renderer::EndScene();
+		Orca::Renderer::EndScene();
 	}
 
-	void OnEvent(Hazel::Event& event) override {
+	void OnEvent(Orca::Event& event) override {
 	}
 
 
 private:
 	// Renderer vars
-	std::shared_ptr<Hazel::VertexArray> m_VertexArray;
-	std::shared_ptr<Hazel::Shader> m_Shader;
-	std::shared_ptr<Hazel::VertexBuffer> m_VertexBuffer;
-	std::shared_ptr<Hazel::IndexBuffer> m_IndexBuffer;
+	std::shared_ptr<Orca::VertexArray> m_VertexArray;
+	std::shared_ptr<Orca::Shader> m_Shader;
+	std::shared_ptr<Orca::VertexBuffer> m_VertexBuffer;
+	std::shared_ptr<Orca::IndexBuffer> m_IndexBuffer;
 
-	std::shared_ptr<Hazel::VertexArray> m_SquareVA;
+	std::shared_ptr<Orca::VertexArray> m_SquareVA;
 
-	Hazel::OrthographicCamera m_Camera;
+	Orca::OrthographicCamera m_Camera;
 	float m_CameraSpeed;
 
 	glm::vec3 pos;
@@ -168,7 +169,7 @@ private:
 };
 
 
-class Sandbox : public Hazel::Application {
+class Sandbox : public Orca::Application {
 public:
 	Sandbox() {
 		PushLayer(new ExampleLayer());
@@ -179,7 +180,7 @@ public:
 	}
 };
 
-Hazel::Application* Hazel::CreateApplication() {
+Orca::Application* Orca::CreateApplication() {
 	return new Sandbox();
 }
 
