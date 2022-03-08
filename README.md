@@ -1,5 +1,5 @@
-# Hazel
-Hazel Engine
+# Orca
+Orca Game Engine
 
 This is my recreation of Yan Chernikov AKA TheCherno's game engine Hazel. It is following his ongoing Youtube series.
 The goal is a full-fledged game engine API similar to Unity or Unreal, obviously with less functionality.
