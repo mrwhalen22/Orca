@@ -1,6 +1,8 @@
 #include "oapch.h"
 #include "Orca/Renderer/Renderer.h"
 
+#include "Orca/Platform/OpenGL/OpenGLShader.h"
+
 
 
 namespace Orca {
@@ -32,8 +34,8 @@ namespace Orca {
 		vertexArray->Bind();
 
 		shader->Bind();
-		shader->UploadUniformMat4("u_VPMatrix", m_SceneData->ViewProjectionMatrix);
-		shader->UploadUniformMat4("u_Transform", transform);
+		std::dynamic_pointer_cast<OpenGLShader>(shader)->UploadUniformMat4("u_VPMatrix", m_SceneData->ViewProjectionMatrix);
+		std::dynamic_pointer_cast<OpenGLShader>(shader)->UploadUniformMat4("u_Transform", transform);
 
 		RenderCommand::DrawIndexed(vertexArray);
 

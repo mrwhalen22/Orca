@@ -140,6 +140,7 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Orca\Platform\OpenGL\OpenGLShader.h" />
     <ClInclude Include="src\Orca.h" />
     <ClInclude Include="src\Orca\Application.h" />
     <ClInclude Include="src\Orca\Core.h" />
@@ -589,6 +590,7 @@
     <ClInclude Include="vendor\glm\glm\vector_relational.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Orca\Platform\OpenGL\OpenGLShader.cpp" />
     <ClCompile Include="src\Orca\Application.cpp" />
     <ClCompile Include="src\Orca\ImGui\ImGuiBuild.cpp" />
     <ClCompile Include="src\Orca\ImGui\ImGuiLayer.cpp" />

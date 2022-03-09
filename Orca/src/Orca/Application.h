@@ -36,7 +36,7 @@ namespace Orca {
 		static Application* s_Instance;
 
 		// Window Ref
-		std::unique_ptr<Window> m_Window;
+		Scope<Window> m_Window;
 		// Single ImGui Layer and Layer Stack
 		ImGuiLayer* m_ImGuiLayer;
 		LayerStack m_LayerStack;

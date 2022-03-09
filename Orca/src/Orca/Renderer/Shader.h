@@ -1,24 +1,17 @@
 #pragma once
 #include "Orca/Core.h"
-#include <string>
-#include <glm/glm.hpp>
 
 namespace Orca {
 
 	class Shader {
 
 	public:
-		Shader(const std::string& vertexSrc, const std::string& fragmentSrc);
-		~Shader();
+		virtual ~Shader() = default;
 
-		void Bind();
-		void Unbind();
+		virtual void Bind() const  = 0;
+		virtual void Unbind() const  = 0;
 
-		void UploadUniformMat4(const std::string& name, const glm::mat4& mattrix);
-		void UploadUniformFloat4(const std::string& name, const glm::vec4& values);
-
-	private:
-		uint32_t m_RendererID;
+		static Shader* Create(std::string& vertexSrc, std::string& fragmentSrc);
 	};
 
 }
