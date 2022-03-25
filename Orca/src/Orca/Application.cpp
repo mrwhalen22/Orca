@@ -4,6 +4,7 @@
 #include "Orca/Input.h"
 #include "Orca/Log.h"
 #include "Orca/Core/Core.h"
+#include "Orca/Renderer/Renderer.h"
 
 #include <GLFW/glfw3.h>
 
@@ -22,9 +23,12 @@ namespace Orca
 		m_Window = Scope<Window>(Window::Create());
 		m_Window->SetEventCallback(OA_BIND_EVENT_FN(Application::OnEvent));
 
+		Renderer::Init();
+
 		m_ImGuiLayer = new ImGuiLayer;
 		PushOverlay(m_ImGuiLayer);
 
+		
 		
 	}
 
