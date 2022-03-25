@@ -1,12 +1,13 @@
 #include "oapch.h"
-#include "VertexArray.h"
-#include "Renderer.h"
+#include "Texture.h"
+#include "Orca/Renderer/Renderer.h"
 
-#include "Orca/Platform/OpenGL/OpenGLVertexArray.h"
+#include "Orca/Platform/OpenGL/OpenGLTexture.h"
 
-namespace Orca {
-
-	Ref<VertexArray> VertexArray::Create() {
+namespace Orca
+{
+	Ref<Texture2D> Texture2D::Create(const std::string& path)
+	{
 		switch (Renderer::GetAPI()) {
 		case RendererAPI::API::None:
 			OA_CORE_ASSERT(false, "RendererAPI::None is not Supported!");
@@ -14,7 +15,7 @@ namespace Orca {
 			break;
 
 		case RendererAPI::API::OpenGL:
-			return std::make_shared<OpenGLVertexArray>();
+			return std::make_shared<OpenGLTexture2D>(path);
 			break;
 
 		}

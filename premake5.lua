@@ -21,6 +21,7 @@ IncludeDir["GLFW"] = "Orca/vendor/GLFW/include"
 IncludeDir["Glad"] = "Orca/vendor/Glad/include"
 IncludeDir["imgui"] = "Orca/vendor/imgui"
 IncludeDir["glm"] = "Orca/vendor/glm"
+IncludeDir["stb_image"] = "Orca/vendor/stb_image"
 
 group "Dependencies"
 
@@ -46,6 +47,7 @@ project "Orca"
 	files {
 		"%{prj.name}/src/**.h",
 		"%{prj.name}/src/**.cpp",
+		"%{prj.name}/vendor/stb_image/*",
 		"%{prj.name}/vendor/glm/glm/**.hpp",
 		"%{prj.name}/vendor/glm/glm/**.inl"
 
@@ -57,7 +59,8 @@ project "Orca"
 		"%{IncludeDir.GLFW}",
 		"%{IncludeDir.Glad}",
 		"%{IncludeDir.imgui}",
-		"%{IncludeDir.glm}"
+		"%{IncludeDir.glm}",
+		"%{IncludeDir.stb_image}"
 	}
 
 	links {

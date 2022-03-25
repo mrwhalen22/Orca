@@ -3,7 +3,7 @@
 #include "Orca/Application.h"
 #include "Orca/Input.h"
 #include "Orca/Log.h"
-#include "Orca/Core.h"
+#include "Orca/Core/Core.h"
 
 #include <GLFW/glfw3.h>
 

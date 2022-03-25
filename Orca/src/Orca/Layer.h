@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Orca/Core.h"
+#include "Orca/Core/Core.h"
 #include "Orca/Events/Event.h"
 #include "Orca/Core/Timestep.h"
 

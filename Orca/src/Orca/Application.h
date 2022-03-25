@@ -1,5 +1,5 @@
 #pragma once
-#include "Orca/Core.h"
+#include "Orca/Core/Core.h"
 #include "Orca/Window.h"
 #include "Orca/LayerStack.h"
 

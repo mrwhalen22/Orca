@@ -15,21 +15,22 @@ public:
 
 
 		float vertices[] = {
-			-1.0f, -1.0f, 0.0f,	
-			 1.0f, -1.0f, 0.0f,	
-			 1.0f,  1.0f, 0.0f,
-			-1.0f,  1.0f, 0.0f
+			-1.0f, -1.0f, 0.0f, 0.0f, 0.0f,	
+			 1.0f, -1.0f, 0.0f,	1.0f, 0.0f,
+			 1.0f,  1.0f, 0.0f, 1.0f, 1.0f,
+			-1.0f,  1.0f, 0.0f, 0.0f, 1.0f
 		};
 
 
 
-		m_SquareVA.reset(Orca::VertexArray::Create());
+		m_SquareVA = Orca::VertexArray::Create();
 		Orca::Ref<Orca::VertexBuffer> squareVB;
 		squareVB.reset(Orca::VertexBuffer::Create(vertices, sizeof(vertices)));
 
 		{
 			Orca::BufferLayout layout = {
 				{Orca::ShaderDataType::Float3, "a_Position"},
+				{Orca::ShaderDataType::Float2, "a_TexCoord"}
 			};
 			squareVB->SetLayout(layout);
 		}
@@ -73,6 +74,45 @@ public:
 
 		m_FlatShader.reset(Orca::Shader::Create(vertexSrc, fragmentSrc));
 
+		vertexSrc = R"(
+			#version 410 core
+
+			layout(location = 0) in vec3 a_Position;
+			layout(location = 1) in vec2 a_TexCoord;
+
+			uniform mat4 u_VPMatrix;
+			uniform mat4 u_Transform;
+
+			out vec2 v_TexCoord;
+	
+			void main() {
+				v_TexCoord = a_TexCoord;
+				gl_Position = u_VPMatrix * u_Transform * vec4(a_Position, 1.0);
+			}	
+			
+		)";
+		fragmentSrc = R"(
+			#version 410 core
+
+			layout(location = 0) out vec4 color;			
+
+			in vec2 v_TexCoord;
+
+			uniform sampler2D u_Texture;
+
+			void main() {
+				color = texture(u_Texture, v_TexCoord);
+			}	
+			
+		)";
+
+
+		m_TextureShader.reset(Orca::Shader::Create(vertexSrc, fragmentSrc));
+
+		m_Texture2D = Orca::Texture2D::Create("assets/textures/orca.png");
+
+		std::dynamic_pointer_cast<Orca::OpenGLShader>(m_TextureShader)->Bind();
+		std::dynamic_pointer_cast<Orca::OpenGLShader>(m_TextureShader)->UploadUniformInt("u_Texture", 0);
 
 	}
 
@@ -106,16 +146,17 @@ public:
 			m_Transform = { 0,0,0 };
 		}
 
-		
+
 
 		m_Camera.SetPosition(pos);
 		m_Camera.SetRotation(rot);
 
 		std::dynamic_pointer_cast<Orca::OpenGLShader>(m_FlatShader)->Bind();
-		std::dynamic_pointer_cast<Orca::OpenGLShader>(m_FlatShader)->UploadUniformFloat4("u_Color", m_Color);
+		//std::dynamic_pointer_cast<Orca::OpenGLShader>(m_FlatShader)->UploadUniformFloat4("u_Color", m_Color);
 
 		Orca::Renderer::BeginScene(m_Camera);
-		Orca::Renderer::Submit(m_SquareVA, m_FlatShader, glm::translate(glm::mat4(1.0f), m_Transform));
+		m_Texture2D->Bind();
+		Orca::Renderer::Submit(m_SquareVA, m_TextureShader, glm::translate(glm::mat4(1.0f), m_Transform));
 		Orca::Renderer::EndScene();
 	}
 
@@ -126,6 +167,9 @@ public:
 private:
 	// Renderer vars
 	Orca::Ref<Orca::Shader> m_FlatShader;
+	Orca::Ref<Orca::Shader> m_TextureShader;
+
+	Orca::Ref<Orca::Texture2D> m_Texture2D;
 	/*Orca::Ref<Orca::VertexBuffer> m_VertexBuffer;
 	Orca::Ref<Orca::IndexBuffer> m_IndexBuffer;*/
 

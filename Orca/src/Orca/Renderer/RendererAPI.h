@@ -3,7 +3,7 @@
 #include <memory>
 #include <glm/glm.hpp>
 #include "VertexArray.h"
-#include "Orca/Core.h"
+#include "Orca/Core/Core.h"
 
 namespace Orca
 {
