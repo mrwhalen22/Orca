@@ -25,7 +25,7 @@ IncludeDir["glm"] = "Orca/vendor/glm"
 group "Dependencies"
 
 	include "Orca/vendor/GLFW"
-	include "Orca/vendor/GLAD"
+	include "Orca/vendor/Glad"
 	include "Orca/vendor/imgui"
 
 group ""
@@ -61,8 +61,9 @@ project "Orca"
 	}
 
 	links {
-		"GLFW", "Glad", "imgui",
-		"opengl32.lib"
+		"opengl32.lib",
+		"GLFW", "Glad", "imgui"
+		
 	}
 
 	filter "system:windows"
