@@ -1,12 +1,12 @@
-[submodule "Hazel/vendor/spdlog"]
-	path = Hazel/vendor/spdlog
+[submodule "Orca/vendor/spdlog"]
+	path = Orca/vendor/spdlog
 	url = https://github.com/gabime/spdlog
-[submodule "Hazel/vendor/GLFW"]
-	path = Hazel/vendor/GLFW
+[submodule "Orca/vendor/GLFW"]
+	path = Orca/vendor/GLFW
 	url = https://github.com/mrwhalen22/glfw
-[submodule "Hazel/vendor/imgui"]
-	path = Hazel/vendor/imgui
+[submodule "Orca/vendor/imgui"]
+	path = Orca/vendor/imgui
 	url = https://github.com/mrwhalen22/imgui
-[submodule "Hazel/vendor/glm"]
-	path = Hazel/vendor/glm
+[submodule "Orca/vendor/glm"]
+	path = Orca/vendor/glm
 	url = https://github.com/g-truc/glm
