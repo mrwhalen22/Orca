@@ -43,71 +43,9 @@ public:
 		m_SquareVA->AddVertexBuffer(squareVB);
 		m_SquareVA->SetIndexBuffer(squareIB);
 
-
-		std::string vertexSrc = R"(
-			#version 410 core
-
-			layout(location = 0) in vec3 a_Position;			
-
-			uniform mat4 u_VPMatrix;
-			uniform mat4 u_Transform;
-
-	
-			void main() {
-				gl_Position = u_VPMatrix * u_Transform * vec4(a_Position, 1.0);
-			}	
-			
-		)";
-		std::string fragmentSrc = R"(
-			#version 410 core
-
-			layout(location = 0) out vec4 color;			
-
-			uniform vec4 u_Color;
-
-			void main() {
-				color = u_Color;
-			}	
-			
-		)";
-
-
-		m_FlatShader.reset(Orca::Shader::Create(vertexSrc, fragmentSrc));
-
-		vertexSrc = R"(
-			#version 410 core
-
-			layout(location = 0) in vec3 a_Position;
-			layout(location = 1) in vec2 a_TexCoord;
-
-			uniform mat4 u_VPMatrix;
-			uniform mat4 u_Transform;
-
-			out vec2 v_TexCoord;
-	
-			void main() {
-				v_TexCoord = a_TexCoord;
-				gl_Position = u_VPMatrix * u_Transform * vec4(a_Position, 1.0);
-			}	
-			
-		)";
-		fragmentSrc = R"(
-			#version 410 core
-
-			layout(location = 0) out vec4 color;			
-
-			in vec2 v_TexCoord;
-
-			uniform sampler2D u_Texture;
-
-			void main() {
-				color = texture(u_Texture, v_TexCoord);
-			}	
-			
-		)";
-
-
-		m_TextureShader.reset(Orca::Shader::Create(vertexSrc, fragmentSrc));
+		std::string vertexPath = "assets/shaders/TextureVertex.glsl";
+		std::string fragmentPath = "assets/shaders/TextureFragment.glsl";
+		m_TextureShader.reset(Orca::Shader::Create(vertexPath, fragmentPath));
 
 		m_Texture2D = Orca::Texture2D::Create("assets/textures/orca.png");
 
@@ -151,7 +89,6 @@ public:
 		m_Camera.SetPosition(pos);
 		m_Camera.SetRotation(rot);
 
-		std::dynamic_pointer_cast<Orca::OpenGLShader>(m_FlatShader)->Bind();
 		//std::dynamic_pointer_cast<Orca::OpenGLShader>(m_FlatShader)->UploadUniformFloat4("u_Color", m_Color);
 
 		Orca::Renderer::BeginScene(m_Camera);
@@ -166,7 +103,6 @@ public:
 
 private:
 	// Renderer vars
-	Orca::Ref<Orca::Shader> m_FlatShader;
 	Orca::Ref<Orca::Shader> m_TextureShader;
 
 	Orca::Ref<Orca::Texture2D> m_Texture2D;

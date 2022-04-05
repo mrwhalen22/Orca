@@ -2,12 +2,17 @@
 #include "Orca/Renderer/Shader.h"
 #include <glm/glm.hpp>
 
+typedef unsigned int GLenum;
+
 namespace Orca {
+
+
 
 	class OpenGLShader : public Shader
 	{
 	public:
-		OpenGLShader(const std::string& vertexSrc, const std::string& fragmentSrc);
+		OpenGLShader(const std::string& vertexPath, const std::string& fragmentPath);
+		OpenGLShader(const std::string& path);
 		virtual ~OpenGLShader();
 
 		virtual void Bind() const override;
@@ -23,6 +28,10 @@ namespace Orca {
 
 		void UploadUniformInt(const std::string& name, const int value);
 
+	private:
+		void Compile(std::unordered_map<GLenum, std::string>);
+		std::string ReadFile(const std::string& path);
+		std::unordered_map<GLenum, std::string> PreProcess(const std::string& source);
 
 	private:
 		uint32_t m_RendererID;

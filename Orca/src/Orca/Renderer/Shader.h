@@ -11,7 +11,8 @@ namespace Orca {
 		virtual void Bind() const  = 0;
 		virtual void Unbind() const  = 0;
 
-		static Shader* Create(std::string& vertexSrc, std::string& fragmentSrc);
+		static Shader* Create(const std::string& vertexPath, const std::string& fragmentPath);
+		static Shader* Create(const std::string& path);
 	};
 
 }
