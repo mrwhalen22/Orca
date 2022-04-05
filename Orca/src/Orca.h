@@ -21,6 +21,7 @@
 #include "Orca/Renderer/VertexArray.h"
 #include "Orca/Renderer/OrthographicCamera.h"
 #include "Orca/Renderer/Shader.h"
+#include "Orca/Renderer/Texture.h"
 
 
 // Entry point goes last

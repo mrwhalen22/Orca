@@ -1,4 +1,5 @@
 #pragma once
+#include <memory>
 
 // Preprocessor directives for importing dll classes/functions from Orca
 #ifdef OA_PLATFORM_WINDOWS
@@ -34,5 +35,13 @@
 //macro for binding functions
 #define OA_BIND_EVENT_FN(fn) std::bind(&fn, this, std::placeholders::_1)
 
+namespace Orca
+{
+	template<typename T>
+	using Scope = std::unique_ptr<T>;
+
+	template<typename T>
+	using Ref = std::shared_ptr<T>;
+}
 
 

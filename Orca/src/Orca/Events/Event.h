@@ -1,6 +1,6 @@
 #pragma once
 #include "oapch.h"
-#include "Orca/Core.h"
+#include "Orca/Core/Core.h"
 
 namespace Orca {
 
