@@ -7,6 +7,7 @@
 
 #include <imgui/imgui.h>
 
+
 class ExampleLayer : public Orca::Layer {
 public:
 	ExampleLayer()
@@ -43,14 +44,13 @@ public:
 		m_SquareVA->AddVertexBuffer(squareVB);
 		m_SquareVA->SetIndexBuffer(squareIB);
 
-		std::string vertexPath = "assets/shaders/TextureVertex.glsl";
-		std::string fragmentPath = "assets/shaders/TextureFragment.glsl";
-		m_TextureShader.reset(Orca::Shader::Create(vertexPath, fragmentPath));
+		std::string TextureShaderPath = "assets/shaders/Texture.glsl";
+		auto textureShader = m_ShaderLib.Load(TextureShaderPath);
 
 		m_Texture2D = Orca::Texture2D::Create("assets/textures/orca.png");
 
-		std::dynamic_pointer_cast<Orca::OpenGLShader>(m_TextureShader)->Bind();
-		std::dynamic_pointer_cast<Orca::OpenGLShader>(m_TextureShader)->UploadUniformInt("u_Texture", 0);
+		std::dynamic_pointer_cast<Orca::OpenGLShader>(textureShader)->Bind();
+		std::dynamic_pointer_cast<Orca::OpenGLShader>(textureShader)->UploadUniformInt("u_Texture", 0);
 
 	}
 
@@ -93,7 +93,7 @@ public:
 
 		Orca::Renderer::BeginScene(m_Camera);
 		m_Texture2D->Bind();
-		Orca::Renderer::Submit(m_SquareVA, m_TextureShader, glm::translate(glm::mat4(1.0f), m_Transform));
+		Orca::Renderer::Submit(m_SquareVA, m_ShaderLib.Get("Texture"), glm::translate(glm::mat4(1.0f), m_Transform));
 		Orca::Renderer::EndScene();
 	}
 
@@ -103,7 +103,7 @@ public:
 
 private:
 	// Renderer vars
-	Orca::Ref<Orca::Shader> m_TextureShader;
+	Orca::ShaderLibrary m_ShaderLib;
 
 	Orca::Ref<Orca::Texture2D> m_Texture2D;
 	/*Orca::Ref<Orca::VertexBuffer> m_VertexBuffer;
