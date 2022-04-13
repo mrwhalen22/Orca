@@ -31,6 +31,7 @@ namespace Orca {
 
 	private:
 		bool OnWindowClose(WindowCloseEvent& e);
+		bool OnWindowResized(WindowResizeEvent& e);
 
 		// Singleton
 		static Application* s_Instance;
@@ -42,6 +43,7 @@ namespace Orca {
 		LayerStack m_LayerStack;
 		float m_LastFrameTime = 0.0;
 		bool m_Running = true;
+		bool m_Minimized = false;
 		
 
 	};

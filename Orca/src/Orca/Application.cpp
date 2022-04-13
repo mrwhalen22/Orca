@@ -53,6 +53,7 @@ namespace Orca
 	{
 		EventDispatcher dispatcher(e);
 		dispatcher.Dispatch<WindowCloseEvent>(OA_BIND_EVENT_FN(Application::OnWindowClose));
+		dispatcher.Dispatch<WindowResizeEvent>(OA_BIND_EVENT_FN(Application::OnWindowResized));
 
 		for (auto it = m_LayerStack.end(); it != m_LayerStack.begin();)
 		{
@@ -69,6 +70,17 @@ namespace Orca
 		return true;
 	}
 
+	bool Application::OnWindowResized(WindowResizeEvent& e) {
+
+		if (e.GetWidth() == 0 || e.GetHeight() == 0) {
+			m_Minimized = true;
+		}
+		m_Minimized = false;
+		Renderer::OnWindowResize(e.GetWidth(), e.GetHeight());
+
+		return false;
+	}
+
 	// Main loop for application
 	// Updates and Renders Layers
 	void Application::Run()
@@ -79,10 +91,14 @@ namespace Orca
 			Timestep timestep = time - m_LastFrameTime;
 			m_LastFrameTime = time;
 			
+			// Don't update layers if the window is minimized
+			if (!m_Minimized) {
+				// Updates every layer
+				for (Layer* layer : m_LayerStack)
+					layer->OnUpdate(timestep);
 
-			// Updates every layer
-			for (Layer* layer : m_LayerStack)
-				layer->OnUpdate(timestep);
+			}
+
 
 			// Renders every layer
 			m_ImGuiLayer->Begin();
@@ -92,8 +108,8 @@ namespace Orca
 
 			m_ImGuiLayer->End();
 
-
-			m_Window->OnUpdate();
+			if(!m_Minimized)
+				m_Window->OnUpdate();
 		}
 	}
 }
