@@ -7,10 +7,11 @@
 
 #include <imgui/imgui.h>
 
+
 class ExampleLayer : public Orca::Layer {
 public:
 	ExampleLayer()
-		:Layer("Example"), m_Camera(-3.2f, 3.2f, -1.8f, 1.8f), pos(0.0f), m_CameraSpeed(5.0f), m_Transform(0.0f)
+		:Layer("Example"), m_Transform(0.0f), m_CameraController(16.0f/9.0f, true)
 	{
 
 
@@ -43,14 +44,13 @@ public:
 		m_SquareVA->AddVertexBuffer(squareVB);
 		m_SquareVA->SetIndexBuffer(squareIB);
 
-		std::string vertexPath = "assets/shaders/TextureVertex.glsl";
-		std::string fragmentPath = "assets/shaders/TextureFragment.glsl";
-		m_TextureShader.reset(Orca::Shader::Create(vertexPath, fragmentPath));
+		std::string TextureShaderPath = "assets/shaders/Texture.glsl";
+		auto textureShader = m_ShaderLib.Load(TextureShaderPath);
 
 		m_Texture2D = Orca::Texture2D::Create("assets/textures/orca.png");
 
-		std::dynamic_pointer_cast<Orca::OpenGLShader>(m_TextureShader)->Bind();
-		std::dynamic_pointer_cast<Orca::OpenGLShader>(m_TextureShader)->UploadUniformInt("u_Texture", 0);
+		std::dynamic_pointer_cast<Orca::OpenGLShader>(textureShader)->Bind();
+		std::dynamic_pointer_cast<Orca::OpenGLShader>(textureShader)->UploadUniformInt("u_Texture", 0);
 
 	}
 
@@ -61,49 +61,35 @@ public:
 	}
 
 	void OnUpdate(Orca::Timestep ts) override {
+
+		m_CameraController.OnUpdate(ts);
+
 		Orca::RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
 		Orca::RenderCommand::Clear();
 
-		if (Orca::Input::IsKeyPressed(OA_KEY_UP)) pos.y += m_CameraSpeed * ts;
-		else if (Orca::Input::IsKeyPressed(OA_KEY_DOWN)) pos.y -= m_CameraSpeed * ts;
-		if (Orca::Input::IsKeyPressed(OA_KEY_RIGHT)) pos.x += m_CameraSpeed * ts;
-		else if (Orca::Input::IsKeyPressed(OA_KEY_LEFT)) pos.x -= m_CameraSpeed * ts;
-
-		if (Orca::Input::IsKeyPressed(OA_KEY_Q)) rot -= m_CameraSpeed * 3 * ts;
-		else if (Orca::Input::IsKeyPressed(OA_KEY_E)) rot += m_CameraSpeed * 3  * ts;
-
-		if (Orca::Input::IsKeyPressed(OA_KEY_W)) m_Transform.y += m_CameraSpeed * ts;
-		else if (Orca::Input::IsKeyPressed(OA_KEY_S)) m_Transform.y -= m_CameraSpeed * ts;
-		if (Orca::Input::IsKeyPressed(OA_KEY_D)) m_Transform.x += m_CameraSpeed * ts;
-		else if (Orca::Input::IsKeyPressed(OA_KEY_A)) m_Transform.x -= m_CameraSpeed * ts;
+		
 
 		if(Orca::Input::IsKeyPressed(OA_KEY_R))
 		{
-			pos = { 0,0,0 };
-			rot = 0;
 			m_Transform = { 0,0,0 };
 		}
 
-
-
-		m_Camera.SetPosition(pos);
-		m_Camera.SetRotation(rot);
-
 		//std::dynamic_pointer_cast<Orca::OpenGLShader>(m_FlatShader)->UploadUniformFloat4("u_Color", m_Color);
 
-		Orca::Renderer::BeginScene(m_Camera);
+		Orca::Renderer::BeginScene(m_CameraController.GetCamera());
 		m_Texture2D->Bind();
-		Orca::Renderer::Submit(m_SquareVA, m_TextureShader, glm::translate(glm::mat4(1.0f), m_Transform));
+		Orca::Renderer::Submit(m_SquareVA, m_ShaderLib.Get("Texture"), glm::translate(glm::mat4(1.0f), m_Transform));
 		Orca::Renderer::EndScene();
 	}
 
-	void OnEvent(Orca::Event& event) override {
+	void OnEvent(Orca::Event& e) override {
+		m_CameraController.OnEvent(e);
 	}
 
 
 private:
 	// Renderer vars
-	Orca::Ref<Orca::Shader> m_TextureShader;
+	Orca::ShaderLibrary m_ShaderLib;
 
 	Orca::Ref<Orca::Texture2D> m_Texture2D;
 	/*Orca::Ref<Orca::VertexBuffer> m_VertexBuffer;
@@ -111,11 +97,7 @@ private:
 
 	Orca::Ref<Orca::VertexArray> m_SquareVA;
 
-	Orca::OrthographicCamera m_Camera;
-	float m_CameraSpeed;
-
-	glm::vec3 pos;
-	float rot = 0.0f;
+	Orca::OrthographicCameraController m_CameraController;
 
 	glm::vec3 m_Transform;
 	glm::vec4 m_Color;

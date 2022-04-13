@@ -6,9 +6,13 @@
 #include <glad/glad.h>
 #include <glm/gtc/type_ptr.hpp>
 
+#define MAX_SHADERS 2
+
 namespace Orca {
 
-	OpenGLShader::OpenGLShader(const std::string& vertexPath, const std::string& fragmentPath) {
+	OpenGLShader::OpenGLShader(const std::string& name, const std::string& vertexPath, const std::string& fragmentPath) 
+		: m_Name(name)
+	{
 		std::string vertexSource = ReadFile(vertexPath);
 		std::string fragmentSource = ReadFile(fragmentPath);
 
@@ -23,6 +27,14 @@ namespace Orca {
 		std::string source = ReadFile(path);
 		std::unordered_map<GLenum, std::string> splitSources = PreProcess(source);
 		Compile(splitSources);
+
+		auto lastSlash = path.find_last_of("/\\");
+		lastSlash = lastSlash == std::string::npos ? 0 : lastSlash+1;
+
+		auto lastDot = path.rfind('.');
+		auto count = lastDot == std::string::npos ? path.size() - lastSlash : lastDot - lastSlash;
+		m_Name = path.substr(lastSlash, count);
+		
 	}
 
 	
@@ -86,10 +98,12 @@ namespace Orca {
 
 	void OpenGLShader::Compile(std::unordered_map<GLenum, std::string> sources) {
 		
+		OA_CORE_ASSERT(sources.size() <= MAX_SHADERS, "Too many shaders! Orca supports 2 or less shaders!");
+		std::array<GLenum, MAX_SHADERS> glShaderIDs;
+
 		GLuint program = glCreateProgram();
 
-		std::vector<GLenum> glShaderIDs(sources.size());
-
+		int shaderIndex = 0;
 		for (auto& kv : sources) {
 			GLenum type = kv.first;
 			const std::string& sourceStr = kv.second;
@@ -120,7 +134,8 @@ namespace Orca {
 			}
 
 			glAttachShader(program, shader);
-			glShaderIDs.push_back(shader);
+			glShaderIDs[shaderIndex++] = shader;
+			
 		}
 
 
@@ -154,16 +169,15 @@ namespace Orca {
 			return;
 		}
 
-		for (auto& id : glShaderIDs) {
+		for (auto& id : glShaderIDs) 
 			glDetachShader(program, id);
-		}
 
 		m_RendererID = program;
 	}
 
 	std::string OpenGLShader::ReadFile(const std::string& path) {
 		std::string result;
-		std::ifstream in(path, std::ios::in, std::ios::binary);
+		std::ifstream in(path, std::ios::in | std::ios::binary);
 		if (in) {
 			in.seekg(0, std::ios::end);
 			result.resize(in.tellg());
