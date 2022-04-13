@@ -140,6 +140,7 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Orca\OrthographicCameraController.h" />
     <ClInclude Include="src\Orca.h" />
     <ClInclude Include="src\Orca\Application.h" />
     <ClInclude Include="src\Orca\Core\Core.h" />
@@ -593,6 +594,7 @@
     <ClInclude Include="vendor\stb_image\stb_image.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Orca\OrthographicCameraController.cpp" />
     <ClCompile Include="src\Orca\Application.cpp" />
     <ClCompile Include="src\Orca\ImGui\ImGuiBuild.cpp" />
     <ClCompile Include="src\Orca\ImGui\ImGuiLayer.cpp" />

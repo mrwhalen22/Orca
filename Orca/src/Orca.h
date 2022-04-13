@@ -14,6 +14,8 @@
 #include "Orca/MouseButtonCodes.h"
 #include "Orca/Input.h"
 
+#include "Orca/OrthographicCameraController.h"
+
 // Renderer
 #include "Orca/Renderer/Renderer.h"
 #include "Orca/Renderer/RenderCommand.h"

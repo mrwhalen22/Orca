@@ -23,6 +23,8 @@ namespace Orca
 		inline const glm::vec3& GetPosition() const { return m_Position; }
 		inline const float GetRotation() const { return m_Rotation; }
 
+		void SetProjection(float left, float right, float bottom, float top);
+
 		inline const glm::mat4& GetViewMatrix() const { return m_ViewMatrix; }
 		inline const glm::mat4& GetProjectionMatrix() const { return m_ProjectionMatrix; }
 		inline const glm::mat4& GetViewProjectionMatrix() const { return m_VPMatrix; }
@@ -30,7 +32,6 @@ namespace Orca
 		
 	private:
 		void RecalculateViewMatrix();
-
 
 
 	private:
