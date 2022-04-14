@@ -7,6 +7,7 @@
 
 namespace Orca {
 
+	// Stores Windows Data to be retrieved from GLFW or other API
 	struct WindowProps {
 		std::string Title;
 		unsigned int Width;

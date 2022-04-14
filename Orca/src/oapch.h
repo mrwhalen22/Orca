@@ -16,7 +16,9 @@
 #include <unordered_set>
 #include <sstream>
 
-#include "Orca/Log.h"
+#include "Orca/Core/Core.h"
+#include "Orca/Core/Log.h"
+
 
 
 #ifdef OA_PLATFORM_WINDOWS

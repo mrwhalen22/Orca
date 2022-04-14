@@ -1,8 +1,8 @@
 #include "oapch.h"
 
-#include "Orca/Application.h"
-#include "Orca/Input.h"
-#include "Orca/Log.h"
+#include "Orca/Core/Application.h"
+#include "Orca/Core/Input.h"
+#include "Orca/Core/Log.h"
 #include "Orca/Core/Core.h"
 #include "Orca/Renderer/Renderer.h"
 

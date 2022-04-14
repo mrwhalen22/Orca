@@ -23,6 +23,7 @@ IncludeDir["imgui"] = "Orca/vendor/imgui"
 IncludeDir["glm"] = "Orca/vendor/glm"
 IncludeDir["stb_image"] = "Orca/vendor/stb_image"
 
+-- Groups Dependencies inside VS Project Explorer
 group "Dependencies"
 
 	include "Orca/vendor/GLFW"
@@ -33,6 +34,7 @@ group ""
 
 project "Orca"
 	location "Orca"
+	-- Builds as a static lib
 	kind "StaticLib"
 	language "C++"
 	cppdialect "C++17"

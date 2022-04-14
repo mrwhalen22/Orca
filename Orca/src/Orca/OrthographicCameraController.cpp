@@ -1,7 +1,7 @@
 #include "oapch.h"
 #include "OrthographicCameraController.h"
-#include "Orca/Input.h"
-#include "Orca/KeyCodes.h"
+#include "Orca/Core/Input.h"
+#include "Orca/Core/KeyCodes.h"
 #include "Orca/Core/Core.h"
 
 

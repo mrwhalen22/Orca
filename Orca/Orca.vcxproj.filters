@@ -57,17 +57,38 @@
     <ClInclude Include="src\Orca.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\Orca\Application.h">
-      <Filter>src\Orca</Filter>
+    <ClInclude Include="src\Orca\Core\Application.h">
+      <Filter>src\Orca\Core</Filter>
     </ClInclude>
     <ClInclude Include="src\Orca\Core\Core.h">
+      <Filter>src\Orca\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Orca\Core\EntryPoint.h">
+      <Filter>src\Orca\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Orca\Core\Input.h">
+      <Filter>src\Orca\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Orca\Core\KeyCodes.h">
+      <Filter>src\Orca\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Orca\Core\Layer.h">
+      <Filter>src\Orca\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Orca\Core\LayerStack.h">
+      <Filter>src\Orca\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Orca\Core\Log.h">
+      <Filter>src\Orca\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Orca\Core\MouseButtonCodes.h">
       <Filter>src\Orca\Core</Filter>
     </ClInclude>
     <ClInclude Include="src\Orca\Core\Timestep.h">
       <Filter>src\Orca\Core</Filter>
     </ClInclude>
-    <ClInclude Include="src\Orca\EntryPoint.h">
-      <Filter>src\Orca</Filter>
+    <ClInclude Include="src\Orca\Core\Window.h">
+      <Filter>src\Orca\Core</Filter>
     </ClInclude>
     <ClInclude Include="src\Orca\Events\ApplicationEvent.h">
       <Filter>src\Orca\Events</Filter>
@@ -84,22 +105,7 @@
     <ClInclude Include="src\Orca\ImGui\ImGuiLayer.h">
       <Filter>src\Orca\ImGui</Filter>
     </ClInclude>
-    <ClInclude Include="src\Orca\Input.h">
-      <Filter>src\Orca</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Orca\KeyCodes.h">
-      <Filter>src\Orca</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Orca\Layer.h">
-      <Filter>src\Orca</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Orca\LayerStack.h">
-      <Filter>src\Orca</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Orca\Log.h">
-      <Filter>src\Orca</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Orca\MouseButtonCodes.h">
+    <ClInclude Include="src\Orca\OrthographicCameraController.h">
       <Filter>src\Orca</Filter>
     </ClInclude>
     <ClInclude Include="src\Orca\Platform\OpenGL\OpenGLBuffer.h">
@@ -152,9 +158,6 @@
     </ClInclude>
     <ClInclude Include="src\Orca\Renderer\VertexArray.h">
       <Filter>src\Orca\Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Orca\Window.h">
-      <Filter>src\Orca</Filter>
     </ClInclude>
     <ClInclude Include="src\oapch.h">
       <Filter>src</Filter>
@@ -1407,11 +1410,19 @@
     <ClInclude Include="vendor\stb_image\stb_image.h">
       <Filter>vendor\stb_image</Filter>
     </ClInclude>
-    <ClInclude Include="src\Orca\OrthographicCameraController.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Orca\Application.cpp">
-      <Filter>src\Orca</Filter>
+    <ClCompile Include="src\Orca\Core\Application.cpp">
+      <Filter>src\Orca\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Orca\Core\Layer.cpp">
+      <Filter>src\Orca\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Orca\Core\LayerStack.cpp">
+      <Filter>src\Orca\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Orca\Core\Log.cpp">
+      <Filter>src\Orca\Core</Filter>
     </ClCompile>
     <ClCompile Include="src\Orca\ImGui\ImGuiBuild.cpp">
       <Filter>src\Orca\ImGui</Filter>
@@ -1419,13 +1430,7 @@
     <ClCompile Include="src\Orca\ImGui\ImGuiLayer.cpp">
       <Filter>src\Orca\ImGui</Filter>
     </ClCompile>
-    <ClCompile Include="src\Orca\Layer.cpp">
-      <Filter>src\Orca</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Orca\LayerStack.cpp">
-      <Filter>src\Orca</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Orca\Log.cpp">
+    <ClCompile Include="src\Orca\OrthographicCameraController.cpp">
       <Filter>src\Orca</Filter>
     </ClCompile>
     <ClCompile Include="src\Orca\Platform\OpenGL\OpenGLBuffer.cpp">
@@ -1482,6 +1487,5 @@
     <ClCompile Include="vendor\stb_image\stb_image.cpp">
       <Filter>vendor\stb_image</Filter>
     </ClCompile>
-    <ClCompile Include="src\Orca\OrthographicCameraController.cpp" />
   </ItemGroup>
 </Project>

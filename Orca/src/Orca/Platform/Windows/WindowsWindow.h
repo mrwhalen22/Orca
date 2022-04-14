@@ -1,6 +1,6 @@
 #pragma once
-#include "Orca/Window.h"
-#include "Orca/Log.h"
+#include "Orca/Core/Window.h"
+#include "Orca/Core/Log.h"
 #include "Orca/Renderer/GraphicsContext.h"
 #include <GLFW/glfw3.h>
 
