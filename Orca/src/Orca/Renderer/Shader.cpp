@@ -1,150 +1,73 @@
 #include "oapch.h"
 #include "Shader.h"
 
-#include <glad/glad.h>
-#include <glm/gtc/type_ptr.hpp>
+#include "Orca/Renderer/Renderer.h"
+#include "Orca/Platform/OpenGL/OpenGLShader.h"
 
 namespace Orca {
 
-	Shader::Shader(const std::string& vertexSrc, const std::string& fragmentSrc) {
-		// THIS IS DIRECTLY FROM OPENGL's GLSL COMPILATION WIKI PAGE
-// 
-		// Read our shaders into the appropriate buffers
-
-		// Create an empty vertex shader handle
-		GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
-
-		// Send the vertex shader source code to GL
-		// Note that std::string's .c_str is NULL character terminated.
-		const GLchar* source = vertexSrc.c_str();
-		glShaderSource(vertexShader, 1, &source, 0);
-
-		// Compile the vertex shader
-		glCompileShader(vertexShader);
-
-		GLint isCompiled = 0;
-		glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &isCompiled);
-		if (isCompiled == GL_FALSE)
-		{
-			GLint maxLength = 0;
-			glGetShaderiv(vertexShader, GL_INFO_LOG_LENGTH, &maxLength);
-
-			// The maxLength includes the NULL character
-			std::vector<GLchar> infoLog(maxLength);
-			glGetShaderInfoLog(vertexShader, maxLength, &maxLength, &infoLog[0]);
-
-			// We don't need the shader anymore.
-			glDeleteShader(vertexShader);
-
-			// Use the infoLog as you see fit.
-			OA_CORE_ERROR("{0}", infoLog.data());
-			OA_CORE_ASSERT(false, "Vertex Shader Compilation Failure:");
-
-			// In this simple program, we'll just leave
-			return;
-		}
-
-		// Create an empty fragment shader handle
-		GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-
-		// Send the fragment shader source code to GL
-		// Note that std::string's .c_str is NULL character terminated.
-		source = fragmentSrc.c_str();
-		glShaderSource(fragmentShader, 1, &source, 0);
-
-		// Compile the fragment shader
-		glCompileShader(fragmentShader);
-
-		glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &isCompiled);
-		if (isCompiled == GL_FALSE)
-		{
-			GLint maxLength = 0;
-			glGetShaderiv(fragmentShader, GL_INFO_LOG_LENGTH, &maxLength);
-
-			// The maxLength includes the NULL character
-			std::vector<GLchar> infoLog(maxLength);
-			glGetShaderInfoLog(fragmentShader, maxLength, &maxLength, &infoLog[0]);
-
-			// We don't need the shader anymore.
-			glDeleteShader(fragmentShader);
-			// Either of them. Don't leak shaders.
-			glDeleteShader(vertexShader);
-
-			// Use the infoLog as you see fit.
-			OA_CORE_ERROR("{0}", infoLog.data());
-			OA_CORE_ASSERT(false, "Fragment Shader Compilation Failure:");
-			// In this simple program, we'll just leave
-			return;
-		}
-
-		// Vertex and fragment shaders are successfully compiled.
-		// Now time to link them together into a program.
-		// Get a program object.
-		m_RendererID = glCreateProgram();
-
-		// Attach our shaders to our program
-		glAttachShader(m_RendererID, vertexShader);
-		glAttachShader(m_RendererID, fragmentShader);
-
-		// Link our program
-		glLinkProgram(m_RendererID);
-
-		// Note the different functions here: glGetProgram* instead of glGetShader*.
-		GLint isLinked = 0;
-		glGetProgramiv(m_RendererID, GL_LINK_STATUS, (int*)&isLinked);
-		if (isLinked == GL_FALSE)
-		{
-			GLint maxLength = 0;
-			glGetProgramiv(m_RendererID, GL_INFO_LOG_LENGTH, &maxLength);
-
-			// The maxLength includes the NULL character
-			std::vector<GLchar> infoLog(maxLength);
-			glGetProgramInfoLog(m_RendererID, maxLength, &maxLength, &infoLog[0]);
-
-			// We don't need the program anymore.
-			glDeleteProgram(m_RendererID);
-			// Don't leak shaders either.
-			glDeleteShader(vertexShader);
-			glDeleteShader(fragmentShader);
-
-			// Use the infoLog as you see fit.
-			OA_CORE_ERROR("{0}", infoLog.data());
-			OA_CORE_ASSERT(false, "Shader Link Failure:");
-			// In this simple program, we'll just leave
-			return;
-		}
-
-		// Always detach shaders after a successful link.
-		glDetachShader(m_RendererID, vertexShader);
-		glDetachShader(m_RendererID, fragmentShader);
-
-	}
-
-	Shader::~Shader() {
-		glDeleteProgram(m_RendererID);
-
-	}
-
-	void Shader::Bind() {
-		glUseProgram(m_RendererID);
-
-	}
-
-	void Shader::Unbind() {
-		glUseProgram(0);
-	}
-
-	void Shader::UploadUniformMat4(const std::string& name, const glm::mat4& matrix)
+	Ref<Shader> Shader::Create(const std::string& name, const std::string& vertexPath, const std::string& fragmentPath)
 	{
-		int location = glGetUniformLocation(m_RendererID, name.c_str());
-		glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(matrix));
+		switch (Renderer::GetAPI()) {
+		case RendererAPI::API::None:
+			OA_CORE_ASSERT(false, "RendererAPI::None is not Supported!");
+			return nullptr;
+			break;
+
+		case RendererAPI::API::OpenGL:
+			return std::make_shared<OpenGLShader>(name, vertexPath, fragmentPath);
+			break;
+
+		}
+		OA_CORE_ASSERT(false, "No RendererAPI Selected!");
+		return nullptr;
+
 	}
 
-
-	void Shader::UploadUniformFloat4(const std::string& name, const glm::vec4& values)
+	Ref<Shader> Shader::Create(const std::string& path)
 	{
-		int location = glGetUniformLocation(m_RendererID, name.c_str());
-		glUniform4fv(location, 1, glm::value_ptr(values));
+		switch (Renderer::GetAPI()) {
+		case RendererAPI::API::None:
+			OA_CORE_ASSERT(false, "RendererAPI::None is not Supported!");
+			return nullptr;
+			break;
+
+		case RendererAPI::API::OpenGL:
+			return std::make_shared<OpenGLShader>(path);
+			break;
+
+		}
+		OA_CORE_ASSERT(false, "No RendererAPI Selected!");
+		return nullptr;
+
+	}
+
+	void ShaderLibrary::Add(const std::string& name, const Ref<Shader>& shader) {
+		OA_CORE_ASSERT(m_Shaders.find(name) == m_Shaders.end(), "Shader already exists in Shader Library!");
+		m_Shaders[name] = shader;
+	}
+
+	void ShaderLibrary::Add(const Ref<Shader>& shader) {
+		auto& name = shader->GetName();
+		Add(name, shader);
+	}
+	
+
+	Ref<Shader> ShaderLibrary::Load(const std::string& filepath) {
+		auto shader = Shader::Create(filepath);
+		Add(shader);
+		return shader;
+	}
+
+	Ref<Shader> ShaderLibrary::Load(const std::string& name, const std::string& filepath) {
+		auto shader = Shader::Create(filepath);
+		Add(name, shader);
+		return shader;
+	}
+
+	Ref<Shader> ShaderLibrary::Get(const std::string& name) {
+		OA_CORE_ASSERT(m_Shaders.find(name) != m_Shaders.end(), "Shader is not in the Shader Lbrary!");
+		return m_Shaders[name];
 	}
 
 

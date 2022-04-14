@@ -14,6 +14,8 @@
 #include "Orca/MouseButtonCodes.h"
 #include "Orca/Input.h"
 
+#include "Orca/OrthographicCameraController.h"
+
 // Renderer
 #include "Orca/Renderer/Renderer.h"
 #include "Orca/Renderer/RenderCommand.h"
@@ -21,6 +23,7 @@
 #include "Orca/Renderer/VertexArray.h"
 #include "Orca/Renderer/OrthographicCamera.h"
 #include "Orca/Renderer/Shader.h"
+#include "Orca/Renderer/Texture.h"
 
 
 // Entry point goes last
