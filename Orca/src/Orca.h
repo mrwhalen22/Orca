@@ -27,8 +27,7 @@
 #include "Orca/Renderer/OrthographicCamera.h"
 
 
-// Entry point goes last
-#include "Orca/Core/EntryPoint.h"
+
 
 
 

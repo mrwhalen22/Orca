@@ -22,11 +22,9 @@ namespace Orca {
 			case ShaderDataType::Mat4:		return GL_FLOAT;
 			case ShaderDataType::Bool:		return GL_BOOL;
 
-				OA_CORE_ASSERT(false, "Unknown ShaderDataType!");
-				return 0;
-
-
 			}
+			OA_CORE_ASSERT(false, "Unknown ShaderDataType!");
+			return 0;
 
 		}
 

@@ -7,13 +7,17 @@
 
 #include <imgui/imgui.h>
 
+#include "Sandbox2D.h"
+
+
+// Entry point goes last
+#include <Orca/Core/EntryPoint.h>
 
 class ExampleLayer : public Orca::Layer {
 public:
 	ExampleLayer()
 		:Layer("Example"), m_Transform(0.0f), m_CameraController(16.0f/9.0f, true)
 	{
-
 
 		float vertices[] = {
 			-1.0f, -1.0f, 0.0f, 0.0f, 0.0f,	
@@ -107,7 +111,8 @@ private:
 class Sandbox : public Orca::Application {
 public:
 	Sandbox() {
-		PushLayer(new ExampleLayer());
+		//PushLayer(new ExampleLayer());
+		PushLayer(new Sandbox2D());
 	}
 
 	~Sandbox() {
