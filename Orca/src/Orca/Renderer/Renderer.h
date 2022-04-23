@@ -27,7 +27,7 @@ namespace Orca {
 		};
 
 	public:
-		static SceneData* m_SceneData;
+		static Scope<Renderer::SceneData> m_SceneData;
 
 	};
 

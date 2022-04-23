@@ -1,5 +1,6 @@
 #include "oapch.h"
 #include "Orca/Renderer/Renderer.h"
+#include "Orca/Renderer/Renderer2D.h"
 
 #include "Orca/Platform/OpenGL/OpenGLShader.h"
 
@@ -7,11 +8,12 @@
 
 namespace Orca {
 
-	Renderer::SceneData* Renderer::m_SceneData = new Renderer::SceneData;
+	Scope<Renderer::SceneData> Renderer::m_SceneData = CreateScope<Renderer::SceneData>();
 
 	void Renderer::Init()
 	{
 		RenderCommand::Init();
+		Renderer2D::Init();
 	}
 
 	void Renderer::OnWindowResize(uint32_t width, uint32_t height) {

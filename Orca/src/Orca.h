@@ -19,6 +19,7 @@
 
 // Renderer Headers
 #include "Orca/Renderer/Renderer.h"
+#include "Orca/Renderer/Renderer2D.h"
 #include "Orca/Renderer/RenderCommand.h"
 #include "Orca/Renderer/Buffer.h"
 #include "Orca/Renderer/VertexArray.h"

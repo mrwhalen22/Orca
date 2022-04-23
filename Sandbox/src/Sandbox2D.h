@@ -8,7 +8,9 @@
 
 #include <imgui/imgui.h>
 
-class Sandbox2D : public Orca::Layer {
+using namespace Orca;
+
+class Sandbox2D : public Layer {
 
 public:
 	Sandbox2D();
@@ -18,15 +20,12 @@ public:
 	virtual void OnAttach() override;
 	virtual void OnDetach() override;
 
-	void OnUpdate(Orca::Timestep ts) override;
+	void OnUpdate(Timestep ts) override;
 	virtual void OnImGuiRender() override;
-	void OnEvent(Orca::Event& e);
+	void OnEvent(Event& e);
 
 private:
-	Orca::OrthographicCameraController m_CameraController;
-
-	Orca::Ref<Orca::VertexArray> m_VertexArray;
-	Orca::Ref<Orca::Shader> m_Shader;
+	OrthographicCameraController m_CameraController;
 
 	glm::vec4 m_Color = { 0.2, 0.2, 0.2, 1.0 };
 	

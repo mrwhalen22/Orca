@@ -1,44 +1,15 @@
 #include "Sandbox2D.h"
 
+using namespace Orca;
+
 Sandbox2D::Sandbox2D() 
-	: Layer("Sandbox2D"), m_CameraController(16.0 / 9.0)
+	: Layer("Sandbox2D"), m_CameraController(16.0f / 9.0f)
 {
 
 }
 
 void Sandbox2D::OnAttach() {
-	float vertices[] = {
-			-1.0f, -1.0f, 0.0f,
-			 1.0f, -1.0f, 0.0f,
-			 1.0f,  1.0f, 0.0f,
-			-1.0f,  1.0f, 0.0f,
-	};
-
-
-
-	m_VertexArray = Orca::VertexArray::Create();
-	Orca::Ref<Orca::VertexBuffer> squareVB;
-	squareVB.reset(Orca::VertexBuffer::Create(vertices, sizeof(vertices)));
-
-	{
-		Orca::BufferLayout layout = {
-			{Orca::ShaderDataType::Float3, "a_Position"}
-		};
-		squareVB->SetLayout(layout);
-	}
-
-
-	unsigned int squareIndices[] = { 0, 1, 2, 2, 3, 0 };
-	Orca::Ref<Orca::IndexBuffer> squareIB;
-	squareIB.reset(Orca::IndexBuffer::Create(squareIndices, 6));
-
-	m_VertexArray->AddVertexBuffer(squareVB);
-	m_VertexArray->SetIndexBuffer(squareIB);
-
-
-
-	std::string ShaderPath = "assets/shaders/FlatColor.glsl";
-	m_Shader = Orca::Shader::Create(ShaderPath);
+	
 
 
 }
@@ -51,16 +22,13 @@ void Sandbox2D::OnDetach() {
 void Sandbox2D::OnUpdate(Orca::Timestep ts) {
 	m_CameraController.OnUpdate(ts);
 
-	Orca::RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
-	Orca::RenderCommand::Clear();
-
-	std::dynamic_pointer_cast<Orca::OpenGLShader>(m_Shader)->Bind();
-	std::dynamic_pointer_cast<Orca::OpenGLShader>(m_Shader)->UploadUniformFloat4("u_Color", m_Color);
+	RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
+	RenderCommand::Clear();
 	
 
-	Orca::Renderer::BeginScene(m_CameraController.GetCamera());
-	Orca::Renderer::Submit(m_VertexArray, m_Shader);
-	Orca::Renderer::EndScene();
+	Renderer2D::BeginScene(m_CameraController.GetCamera());
+	Renderer2D::DrawQuad({0.0f, 0.0f}, { 1.0f, 1.0f }, { 0.8f, 0.2f, 0.3f, 1.0f });
+	Renderer2D::EndScene();
 }
 
 

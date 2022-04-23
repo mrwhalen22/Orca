@@ -171,6 +171,7 @@
     <ClInclude Include="src\Orca\Renderer\OrthographicCamera.h" />
     <ClInclude Include="src\Orca\Renderer\RenderCommand.h" />
     <ClInclude Include="src\Orca\Renderer\Renderer.h" />
+    <ClInclude Include="src\Orca\Renderer\Renderer2D.h" />
     <ClInclude Include="src\Orca\Renderer\RendererAPI.h" />
     <ClInclude Include="src\Orca\Renderer\Shader.h" />
     <ClInclude Include="src\Orca\Renderer\Texture.h" />
@@ -613,6 +614,7 @@
     <ClCompile Include="src\Orca\Renderer\OrthographicCamera.cpp" />
     <ClCompile Include="src\Orca\Renderer\RenderCommand.cpp" />
     <ClCompile Include="src\Orca\Renderer\Renderer.cpp" />
+    <ClCompile Include="src\Orca\Renderer\Renderer2D.cpp" />
     <ClCompile Include="src\Orca\Renderer\RendererAPI.cpp" />
     <ClCompile Include="src\Orca\Renderer\Shader.cpp" />
     <ClCompile Include="src\Orca\Renderer\Texture.cpp" />

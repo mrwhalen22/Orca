@@ -13,6 +13,8 @@
 // Entry point goes last
 #include <Orca/Core/EntryPoint.h>
 
+using namespace Orca;
+
 class ExampleLayer : public Orca::Layer {
 public:
 	ExampleLayer()
@@ -108,7 +110,7 @@ private:
 };
 
 
-class Sandbox : public Orca::Application {
+class Sandbox : public Application {
 public:
 	Sandbox() {
 		//PushLayer(new ExampleLayer());

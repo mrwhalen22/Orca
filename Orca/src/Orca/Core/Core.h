@@ -42,6 +42,11 @@ namespace Orca
 
 	template<typename T>
 	using Ref = std::shared_ptr<T>;
+
+	template<typename T>
+	Scope<T> CreateScope() {
+		return std::make_unique<T>();
+	}
 }
 
 
