@@ -64,6 +64,11 @@ namespace Orca {
 		UploadUniformFloat4(name, value);
 	}
 
+	void OpenGLShader::SetInt(const std::string& name, const int value) {
+		UploadUniformInt(name, value);
+	}
+
+
 	void OpenGLShader::UploadUniformMat3(const std::string& name, const glm::mat3& matrix)
 	{
 		int location = glGetUniformLocation(m_RendererID, name.c_str());
