@@ -20,6 +20,9 @@ void Sandbox2D::OnDetach() {
 }
 
 void Sandbox2D::OnUpdate(Orca::Timestep ts) {
+	if (i > 15) i = 0;
+	i += ts * 5;
+
 	m_CameraController.OnUpdate(ts);
 
 	RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
@@ -27,7 +30,13 @@ void Sandbox2D::OnUpdate(Orca::Timestep ts) {
 	
 
 	Renderer2D::BeginScene(m_CameraController.GetCamera());
-	Renderer2D::DrawQuad({0.0f, 0.0f}, { 1.0f, 1.0f }, { 0.8f, 0.2f, 0.3f, 1.0f });
+	for (int n = 0; n < i; n++) {
+		Renderer2D::DrawQuad({ 0.2 * n - 1.5f, -0.03f*n }, { 0.1f, 1.4f }, 0.1f*n, m_Color);
+
+	}
+	
+
+	
 	Renderer2D::EndScene();
 }
 

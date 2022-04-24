@@ -5,7 +5,8 @@
 #include "Shader.h"
 #include "RenderCommand.h"
 
-#include "Orca/Platform/OpenGL/OpenGLShader.h"
+#include <glm/ext/matrix_transform.hpp>
+
 
 
 
@@ -60,8 +61,8 @@ namespace Orca {
 	}
 
 	void Renderer2D::BeginScene(const OrthographicCamera& camera) {
-		std::dynamic_pointer_cast<OpenGLShader>(s_Data->Shader)->Bind();
-		std::dynamic_pointer_cast<OpenGLShader>(s_Data->Shader)->UploadUniformMat4("u_VPMatrix", camera.GetViewProjectionMatrix());
+		s_Data->Shader->Bind();
+		s_Data->Shader->SetMat4("u_VPMatrix", camera.GetViewProjectionMatrix());
 
 	
 	}
@@ -70,15 +71,34 @@ namespace Orca {
 	}
 
 	// Primitives
+
+	void Renderer2D::DrawQuad(const glm::vec2& position) {
+		DrawQuad({ position.x, position.y, 0.0f }, { 1.0f, 1.0f }, 0.0f, { 1.0f, 1.0f, 1.0f, 1.0f });
+	}
+
+	void Renderer2D::DrawQuad(const glm::vec3& position) {
+		DrawQuad(position, {1.0f, 1.0f}, 0.0f, {1.0f, 1.0f, 1.0f, 1.0f});
+	}
+
 	void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const glm::vec4& color) {
-		DrawQuad({ position.x, position.y, 0 }, size, color);
-	
+		DrawQuad(position, size, 0.0f, color);
 	}
 
 	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color) {
-		std::dynamic_pointer_cast<OpenGLShader>(s_Data->Shader)->Bind();
-		std::dynamic_pointer_cast<OpenGLShader>(s_Data->Shader)->UploadUniformFloat4("u_Color", color);
-		std::dynamic_pointer_cast<OpenGLShader>(s_Data->Shader)->UploadUniformMat4("u_Transform", glm::mat4(1.0f));
+		DrawQuad(position, size, 0.0f, color);
+	}
+
+	void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const float angle_rads, const glm::vec4& color) {
+		DrawQuad({ position.x, position.y, 0.0f }, size, angle_rads, color);
+	}
+
+	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const float angle_rads, const glm::vec4& color) {
+		s_Data->Shader->Bind();
+		s_Data->Shader->SetFloat4("u_Color", color);
+		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * 
+			glm::rotate(glm::mat4(1.0f), angle_rads, { 0.0f, 0.0f, 1.0f }) *
+			glm::scale(glm::mat4(1.0f), {size.x, size.y, 1.0f});
+		s_Data->Shader->SetMat4("u_Transform", transform);
 
 		s_Data->VertexArray->Bind();
 		RenderCommand::DrawIndexed(s_Data->VertexArray);

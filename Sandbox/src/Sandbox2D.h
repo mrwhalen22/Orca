@@ -27,6 +27,7 @@ public:
 private:
 	OrthographicCameraController m_CameraController;
 
-	glm::vec4 m_Color = { 0.2, 0.2, 0.2, 1.0 };
+	glm::vec4 m_Color = { 0.6, 0.6, 0.6, 1.0 };
+	float i = 0;
 	
 };
