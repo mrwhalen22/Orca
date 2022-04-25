@@ -29,11 +29,10 @@ void Sandbox2D::OnUpdate(Orca::Timestep ts) {
 	
 
 	Renderer2D::BeginScene(m_CameraController.GetCamera());
-	for (int n = 0; n < i; n++) {
-		Renderer2D::DrawQuad({ 0.2 * n - 1.5f, 0.0f }, { 0.1f, 1.4f }, 0.0f, m_Color);
-
-	}
-	Renderer2D::DrawQuad({ 0.5f, 0.0f, 0.5f }, { 1.0f, 1.0f }, 0.2f, m_Texture);
+	Renderer2D::DrawQuad({ -1.0f, -0.75f });
+	Renderer2D::DrawQuad({ 0.5f, 0.5f}, { 1.0f, 1.0f }, 0, {0.8f, 0.2f, 0.3f, 1.0f});
+	Renderer2D::DrawQuad({ -0.5f, 0.6f}, { 0.5f, 0.5f }, 0, m_Texture);
+	Renderer2D::DrawQuad({ 0.5f, -0.75f}, { 1.0f, 2.0f }, 0.2f, m_Texture, { 0.8f, 0.2f, 0.3f, 1.0f });
 	Renderer2D::EndScene();
 }
 
