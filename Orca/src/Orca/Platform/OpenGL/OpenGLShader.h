@@ -41,10 +41,12 @@ namespace Orca {
 		void Compile(std::unordered_map<GLenum, std::string>);
 		std::string ReadFile(const std::string& path);
 		std::unordered_map<GLenum, std::string> PreProcess(const std::string& source);
+		int GetUniformLocation(const std::string& name);
 
 	private:
 		uint32_t m_RendererID;
 		std::string m_Name;
+		std::unordered_map<std::string, int> m_UniformLocations;
 	};
 };
 

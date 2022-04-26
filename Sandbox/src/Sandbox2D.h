@@ -29,6 +29,13 @@ private:
 	Ref<Texture2D> m_Texture;
 
 	glm::vec4 m_Color = { 0.6, 0.6, 0.6, 1.0 };
-	float i = 0;
+	float angle = 0.0f;
+
+	struct ProfileResult {
+		const char* Name;
+		float Time;
+	};
+
+	std::vector<ProfileResult> m_ProfileResults;
 	
 };
