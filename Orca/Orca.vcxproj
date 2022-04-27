@@ -145,6 +145,7 @@
     <ClInclude Include="src\Orca\Core\Core.h" />
     <ClInclude Include="src\Orca\Core\EntryPoint.h" />
     <ClInclude Include="src\Orca\Core\Input.h" />
+    <ClInclude Include="src\Orca\Debug\Instrumentor.h" />
     <ClInclude Include="src\Orca\Core\KeyCodes.h" />
     <ClInclude Include="src\Orca\Core\Layer.h" />
     <ClInclude Include="src\Orca\Core\LayerStack.h" />

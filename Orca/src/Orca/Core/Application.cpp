@@ -18,6 +18,8 @@ namespace Orca
 
 	Application::Application()
 	{	
+		OA_PROFILE_FUNCTION();
+
 		s_Instance = this;
 
 		m_Window = Scope<Window>(Window::Create());
@@ -51,6 +53,7 @@ namespace Orca
 	// Sends Events to the event dispatcher to handle each event
 	void Application::OnEvent(Event& e)
 	{
+		OA_PROFILE_FUNCTION();
 		EventDispatcher dispatcher(e);
 		dispatcher.Dispatch<WindowCloseEvent>(OA_BIND_EVENT_FN(Application::OnWindowClose));
 		dispatcher.Dispatch<WindowResizeEvent>(OA_BIND_EVENT_FN(Application::OnWindowResized));
@@ -66,12 +69,13 @@ namespace Orca
 	// Exit for Application
 	bool Application::OnWindowClose(WindowCloseEvent& e)
 	{
+		OA_PROFILE_FUNCTION();
 		m_Running = false;
 		return true;
 	}
 
 	bool Application::OnWindowResized(WindowResizeEvent& e) {
-
+		OA_PROFILE_FUNCTION();
 		if (e.GetWidth() == 0 || e.GetHeight() == 0) {
 			m_Minimized = true;
 		}
@@ -85,31 +89,32 @@ namespace Orca
 	// Updates and Renders Layers
 	void Application::Run()
 	{
+		OA_PROFILE_FUNCTION();
 		while (m_Running)
 		{
+			OA_PROFILE_SCOPE("void Application::Run() - Cycle");
 			float time = (float)glfwGetTime();
 			Timestep timestep = time - m_LastFrameTime;
 			m_LastFrameTime = time;
 			
 			// Don't update layers if the window is minimized
 			if (!m_Minimized) {
+				OA_PROFILE_SCOPE("void Application::Run() - Layer Updates");
 				// Updates every layer
 				for (Layer* layer : m_LayerStack)
 					layer->OnUpdate(timestep);
 
+				// Renders every layer
+				m_ImGuiLayer->Begin();
+
+				for (Layer* layer : m_LayerStack)
+					layer->OnImGuiRender();
+
+				m_ImGuiLayer->End();
 			}
 
-
-			// Renders every layer
-			m_ImGuiLayer->Begin();
-				
-			for (Layer* layer : m_LayerStack)
-				layer->OnImGuiRender();
-
-			m_ImGuiLayer->End();
-
-			if(!m_Minimized)
-				m_Window->OnUpdate();
+			
+			m_Window->OnUpdate();
 		}
 	}
 }

@@ -19,6 +19,7 @@
 #include "Orca/Core/Core.h"
 #include "Orca/Core/Log.h"
 
+#include "Orca/Debug/Instrumentor.h"
 
 
 #ifdef OA_PLATFORM_WINDOWS

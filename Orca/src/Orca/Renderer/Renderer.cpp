@@ -12,6 +12,7 @@ namespace Orca {
 
 	void Renderer::Init()
 	{
+		OA_PROFILE_FUNCTION();
 		RenderCommand::Init();
 		Renderer2D::Init();
 	}

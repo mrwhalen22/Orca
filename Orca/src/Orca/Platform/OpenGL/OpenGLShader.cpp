@@ -11,6 +11,7 @@
 namespace Orca {
 
 	int OpenGLShader::GetUniformLocation(const std::string& name) {
+		OA_PROFILE_FUNCTION();
 		int location;
 		if (m_UniformLocations.find(name) == m_UniformLocations.end()) {
 			location = glGetUniformLocation(m_RendererID, name.c_str());
@@ -23,6 +24,7 @@ namespace Orca {
 	OpenGLShader::OpenGLShader(const std::string& name, const std::string& vertexPath, const std::string& fragmentPath) 
 		: m_Name(name)
 	{
+		OA_PROFILE_FUNCTION();
 		std::string vertexSource = ReadFile(vertexPath);
 		std::string fragmentSource = ReadFile(fragmentPath);
 
@@ -34,6 +36,7 @@ namespace Orca {
 	}
 
 	OpenGLShader::OpenGLShader(const std::string& path) {
+		OA_PROFILE_FUNCTION();
 		std::string source = ReadFile(path);
 		std::unordered_map<GLenum, std::string> splitSources = PreProcess(source);
 		Compile(splitSources);
@@ -49,6 +52,7 @@ namespace Orca {
 
 	
 	OpenGLShader::~OpenGLShader() {
+		OA_PROFILE_FUNCTION();
 		glDeleteProgram(m_RendererID);
 
 	}
@@ -117,7 +121,7 @@ namespace Orca {
 	}
 
 	void OpenGLShader::Compile(std::unordered_map<GLenum, std::string> sources) {
-		
+		OA_PROFILE_FUNCTION();
 		OA_CORE_ASSERT(sources.size() <= MAX_SHADERS, "Too many shaders! Orca supports 2 or less shaders!");
 		std::array<GLenum, MAX_SHADERS> glShaderIDs;
 
@@ -222,6 +226,7 @@ namespace Orca {
 	}
 
 	std::unordered_map<GLenum, std::string> OpenGLShader::PreProcess(const std::string& source) {
+		OA_PROFILE_FUNCTION();
 		std::unordered_map<GLenum, std::string> shaderSources;
 
 		const char* typeToken = "#type";

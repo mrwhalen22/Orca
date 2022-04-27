@@ -6,14 +6,19 @@
 extern Orca::Application* Orca::CreateApplication();
 
 int main(int argc, char** argv) {
-
 	Orca::Log::Init();
-	OA_CORE_TRACE("Orca Application Initialized...");
-	OA_INFO("Welcome to your app!");
 
+	OA_PROFILE_BEGIN_SESSION("Startup", "OrcaProfile-Startup.json");
 	auto app = Orca::CreateApplication();
+	OA_PROFILE_END_SESSION();
+
+	OA_PROFILE_BEGIN_SESSION("Runtime", "OrcaProfile-Runtime.json");
 	app->Run();
+	OA_PROFILE_END_SESSION();
+
+	OA_PROFILE_BEGIN_SESSION("Shutdown", "OrcaProfile-Shutdown.json");
 	delete app;
+	OA_PROFILE_END_SESSION();
 }
 
 #endif

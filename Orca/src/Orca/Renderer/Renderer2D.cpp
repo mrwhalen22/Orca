@@ -21,6 +21,7 @@ namespace Orca {
 	static Renderer2DStorage* s_Data;
 
 	void Renderer2D::Init() {
+		OA_PROFILE_FUNCTION();
 		s_Data = new Renderer2DStorage();
 
 		float vertices[] = {
@@ -61,17 +62,19 @@ namespace Orca {
 	}
 
 	void Renderer2D::Shutdown() {
+		OA_PROFILE_FUNCTION();
 		delete s_Data;
 	}
 
 	void Renderer2D::BeginScene(const OrthographicCamera& camera) {
+		OA_PROFILE_FUNCTION();
 		s_Data->GenericShader->Bind();
 		s_Data->GenericShader->SetMat4("u_VPMatrix", camera.GetViewProjectionMatrix());
 
 	
 	}
 	void Renderer2D::EndScene() {
-
+		OA_PROFILE_FUNCTION();
 	}
 
 	// Primitives
@@ -113,6 +116,7 @@ namespace Orca {
 	}
 
 	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const float angle_rads, const Ref<Texture2D>& texture, const glm::vec4& color) {
+		OA_PROFILE_FUNCTION();
 		s_Data->GenericShader->Bind();
 		s_Data->GenericShader->SetFloat4("u_Color", color);
 

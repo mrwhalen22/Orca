@@ -29,6 +29,7 @@ namespace Orca {
 		}
 
 		OpenGLVertexArray::OpenGLVertexArray() {
+			OA_PROFILE_FUNCTION();
 			glCreateVertexArrays(1, &m_RendererID);
 		}
 
@@ -37,14 +38,17 @@ namespace Orca {
 		}
 
 		void OpenGLVertexArray::Bind() const {
+			OA_PROFILE_FUNCTION();
 			glBindVertexArray(m_RendererID);
 		}
 
 		void OpenGLVertexArray::Unbind() const {
+			OA_PROFILE_FUNCTION();
 			glBindVertexArray(0);
 		}
 
 		void OpenGLVertexArray::AddVertexBuffer(const std::shared_ptr<VertexBuffer>& vb) {
+			OA_PROFILE_FUNCTION();
 			glBindVertexArray(m_RendererID);
 			vb->Bind();
 
@@ -65,6 +69,7 @@ namespace Orca {
 		}
 
 		void OpenGLVertexArray::SetIndexBuffer(const std::shared_ptr<IndexBuffer>& ib) {
+			OA_PROFILE_FUNCTION();
 			glBindVertexArray(m_RendererID);
 			ib->Bind();
 
