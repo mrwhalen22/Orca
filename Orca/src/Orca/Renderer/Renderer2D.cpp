@@ -45,7 +45,6 @@ namespace Orca {
 			squareVB->SetLayout(layout);
 		}
 
-
 		unsigned int squareIndices[] = { 0, 1, 2, 2, 3, 0 };
 		Ref<IndexBuffer> squareIB;
 		squareIB.reset(IndexBuffer::Create(squareIndices, 6));
@@ -119,14 +118,50 @@ namespace Orca {
 		OA_PROFILE_FUNCTION();
 		s_Data->GenericShader->Bind();
 		s_Data->GenericShader->SetFloat4("u_Color", color);
+		s_Data->GenericShader->SetFloat("u_TilingFactor", 1.0f);
 
 		texture->Bind();
 
-		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) *
-			glm::rotate(glm::mat4(1.0f), angle_rads, { 0.0f, 0.0f, 1.0f }) *
-			glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
-		s_Data->GenericShader->SetMat4("u_Transform", transform);
+		if (angle_rads == 0.0f) {
+			glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) *
+				glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
+			s_Data->GenericShader->SetMat4("u_Transform", transform);
+		}
+		else {
+			glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) *
+				glm::rotate(glm::mat4(1.0f), angle_rads, { 0.0f, 0.0f, 1.0f }) *
+				glm::scale(glm::mat4(1.0f), {size.x, size.y, 1.0f });
+			s_Data->GenericShader->SetMat4("u_Transform", transform);
+		}
 		
+		s_Data->VertexArray->Bind();
+		RenderCommand::DrawIndexed(s_Data->VertexArray);
+	}
+
+	void Renderer2D::DrawQuad(const QuadProps props) {
+		OA_PROFILE_FUNCTION();
+		s_Data->GenericShader->Bind();
+		s_Data->GenericShader->SetFloat4("u_Color", props.color);
+		s_Data->GenericShader->SetFloat("u_TilingFactor", props.tilingFactor);
+
+		if (props.texture)
+			props.texture->Bind();
+		else
+			s_Data->WhiteTexture->Bind();
+
+		glm::mat4 transform;
+		if (props.rotation_rads == 0.0f) {
+			transform = glm::translate(glm::mat4(1.0f), props.position) *
+				glm::scale(glm::mat4(1.0f), { props.size.x, props.size.y, 1.0f });
+		}
+		else {
+			transform = glm::translate(glm::mat4(1.0f), props.position) *
+				glm::rotate(glm::mat4(1.0f), props.rotation_rads, { 0.0f, 0.0f, 1.0f }) *
+				glm::scale(glm::mat4(1.0f), { props.size.x, props.size.y, 1.0f });
+		}
+		
+		s_Data->GenericShader->SetMat4("u_Transform", transform);
+
 		s_Data->VertexArray->Bind();
 		RenderCommand::DrawIndexed(s_Data->VertexArray);
 	}
