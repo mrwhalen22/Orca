@@ -1,6 +1,8 @@
 #include "Sandbox2D.h"
 #include <chrono>
 
+#include <glm/gtx/common.hpp>
+
 using namespace Orca;
 
 
@@ -30,10 +32,12 @@ void Sandbox2D::OnUpdate(Orca::Timestep ts) {
 	RenderCommand::Clear();
 
 	Renderer2D::BeginScene(m_CameraController.GetCamera());
-	Renderer2D::DrawQuad({ -1.0f, -0.75f }, {1,1},  {0.2, 0.5, 0.8, 1.0});
-	Renderer2D::DrawQuad({ 0.5f, 0.5f }, { 1.0f, 1.0f }, angle, m_Color);
+	Renderer2D::DrawQuad({ -1.0f, -0.75f, 0.0f }, { 1,1 },  m_Color);
+	Renderer2D::DrawQuad({ 1.0f, -0.75f, 0.0f }, { 1,1 }, { m_Color.r*4, m_Color.g*4, m_Color.b*4, m_Color.a });
+	Renderer2D::DrawQuad({ -0.5f, 0.75f, 0.0f }, { 1,1 }, { m_Color.r / 2.0f, m_Color.g / 2.0f, m_Color.b / 2.0f, m_Color.a });
+	/*Renderer2D::DrawQuad({ 0.5f, 0.5f }, { 1.0f, 1.0f }, angle, m_Color);
 	Renderer2D::DrawQuad({ -0.5f, 0.6f }, { 0.5f, 0.5f }, 0, m_Texture);
-	Renderer2D::DrawQuad({ { 0.5f, -0.75f, 0.0f }, { 1.0f, 2.0f }, angle, m_Texture, m_Color });
+	Renderer2D::DrawQuad({ { 0.5f, -0.75f, 0.0f }, { 1.0f, 2.0f }, angle, m_Texture, m_Color });*/
 	Renderer2D::EndScene();
 	
 }

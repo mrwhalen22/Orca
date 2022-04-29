@@ -21,10 +21,10 @@ namespace Orca
 			s_RendererAPI->SetViewport(x, y, width, height);
 		}
 
-		inline static void DrawIndexed(const Ref<VertexArray>& vertexArray)
+		inline static void DrawIndexed(const Ref<VertexArray>& vertexArray, uint32_t indexCount = 0)
 		{
 			OA_PROFILE_FUNCTION();
-			s_RendererAPI->DrawIndexed(vertexArray);
+			s_RendererAPI->DrawIndexed(vertexArray, indexCount);
 		}
 
 
