@@ -10,9 +10,21 @@
 
 namespace Orca {
 
+	int OpenGLShader::GetUniformLocation(const std::string& name) {
+		OA_PROFILE_FUNCTION();
+		int location;
+		if (m_UniformLocations.find(name) == m_UniformLocations.end()) {
+			location = glGetUniformLocation(m_RendererID, name.c_str());
+			m_UniformLocations[name] = location;
+		}
+		else location = m_UniformLocations[name];
+		return location;
+	}
+
 	OpenGLShader::OpenGLShader(const std::string& name, const std::string& vertexPath, const std::string& fragmentPath) 
 		: m_Name(name)
 	{
+		OA_PROFILE_FUNCTION();
 		std::string vertexSource = ReadFile(vertexPath);
 		std::string fragmentSource = ReadFile(fragmentPath);
 
@@ -24,6 +36,7 @@ namespace Orca {
 	}
 
 	OpenGLShader::OpenGLShader(const std::string& path) {
+		OA_PROFILE_FUNCTION();
 		std::string source = ReadFile(path);
 		std::unordered_map<GLenum, std::string> splitSources = PreProcess(source);
 		Compile(splitSources);
@@ -39,6 +52,7 @@ namespace Orca {
 
 	
 	OpenGLShader::~OpenGLShader() {
+		OA_PROFILE_FUNCTION();
 		glDeleteProgram(m_RendererID);
 
 	}
@@ -52,52 +66,67 @@ namespace Orca {
 		glUseProgram(0);
 	}
 
+	void OpenGLShader::SetMat4(const std::string& name, const glm::mat4& value) {
+		UploadUniformMat4(name, value);
+	}
+	
+	void OpenGLShader::SetFloat(const std::string& name, const float value) {
+		UploadUniformFloat(name, value);
+	
+	}
+
+	void OpenGLShader::SetFloat3(const std::string& name, const glm::vec3& value) {
+		UploadUniformFloat3(name, value);
+	}
+	
+	void OpenGLShader::SetFloat4(const std::string& name, const glm::vec4& value) {
+		UploadUniformFloat4(name, value);
+	}
+
+	void OpenGLShader::SetInt(const std::string& name, const int value) {
+		UploadUniformInt(name, value);
+	}
+
+
 	void OpenGLShader::UploadUniformMat3(const std::string& name, const glm::mat3& matrix)
 	{
-		int location = glGetUniformLocation(m_RendererID, name.c_str());
-		glUniformMatrix3fv(location, 1, GL_FALSE, glm::value_ptr(matrix));
+		glUniformMatrix3fv(GetUniformLocation(name), 1, GL_FALSE, glm::value_ptr(matrix));
 	}
 
 	void OpenGLShader::UploadUniformMat4(const std::string& name, const glm::mat4& matrix)
 	{
-		int location = glGetUniformLocation(m_RendererID, name.c_str());
-		glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(matrix));
+		glUniformMatrix4fv(GetUniformLocation(name), 1, GL_FALSE, glm::value_ptr(matrix));
 	}
 
 
 	void OpenGLShader::UploadUniformFloat(const std::string& name, const float value)
 	{
-		int location = glGetUniformLocation(m_RendererID, name.c_str());
-		glUniform1f(location, value);
+		glUniform1f(GetUniformLocation(name), value);
 	}
 
 	void OpenGLShader::UploadUniformFloat2(const std::string& name, const glm::vec2& values)
 	{
-		int location = glGetUniformLocation(m_RendererID, name.c_str());
-		glUniform2fv(location, 1, glm::value_ptr(values));
+		glUniform2fv(GetUniformLocation(name), 1, glm::value_ptr(values));
 	}
 
 	void OpenGLShader::UploadUniformFloat3(const std::string& name, const glm::vec3& values)
 	{
-		int location = glGetUniformLocation(m_RendererID, name.c_str());
-		glUniform3fv(location, 1, glm::value_ptr(values));
+		glUniform3fv(GetUniformLocation(name), 1, glm::value_ptr(values));
 	}
 
 	void OpenGLShader::UploadUniformFloat4(const std::string& name, const glm::vec4& values)
 	{
-		int location = glGetUniformLocation(m_RendererID, name.c_str());
-		glUniform4fv(location, 1, glm::value_ptr(values));
+		glUniform4fv(GetUniformLocation(name), 1, glm::value_ptr(values));
 	}
 
 
 	void OpenGLShader::UploadUniformInt(const std::string& name, const int value)
 	{
-		int location = glGetUniformLocation(m_RendererID, name.c_str());
-		glUniform1i(location, value);
+		glUniform1i(GetUniformLocation(name), value);
 	}
 
 	void OpenGLShader::Compile(std::unordered_map<GLenum, std::string> sources) {
-		
+		OA_PROFILE_FUNCTION();
 		OA_CORE_ASSERT(sources.size() <= MAX_SHADERS, "Too many shaders! Orca supports 2 or less shaders!");
 		std::array<GLenum, MAX_SHADERS> glShaderIDs;
 
@@ -202,6 +231,7 @@ namespace Orca {
 	}
 
 	std::unordered_map<GLenum, std::string> OpenGLShader::PreProcess(const std::string& source) {
+		OA_PROFILE_FUNCTION();
 		std::unordered_map<GLenum, std::string> shaderSources;
 
 		const char* typeToken = "#type";

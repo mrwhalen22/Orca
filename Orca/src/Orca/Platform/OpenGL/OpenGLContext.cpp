@@ -12,6 +12,7 @@ namespace Orca {
 	}
 
 	void OpenGLContext::Init() {
+		OA_PROFILE_FUNCTION();
 		glfwMakeContextCurrent(m_WindowHandle);
 		int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 		OA_CORE_ASSERT(status, "Failed to initialize Glad");
@@ -24,6 +25,7 @@ namespace Orca {
 	}
 
 	void OpenGLContext::SwapBuffers() {
+		OA_PROFILE_FUNCTION();
 		glfwSwapBuffers(m_WindowHandle);
 
 	}

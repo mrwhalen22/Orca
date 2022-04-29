@@ -1,33 +1,34 @@
 #pragma once
 
 //For use only by Orca Applications
+//#################################
 
-#include "Orca/Application.h"
-#include "Orca/Layer.h"
-#include "Orca/Log.h"
+// Orca Core Headers
+#include "Orca/Core/Application.h"
 #include "Orca/ImGui/ImGuiLayer.h"
-
+#include "Orca/Core/Layer.h"
+#include "Orca/Core/Log.h"
 #include "Orca/Core/Timestep.h"
+#include "Orca/Core/KeyCodes.h"
+#include "Orca/Core/MouseButtonCodes.h"
+#include "Orca/Core/Input.h"
 
-// Input and Codes
-#include "Orca/KeyCodes.h"
-#include "Orca/MouseButtonCodes.h"
-#include "Orca/Input.h"
 
+// Clientside or User Interface Headers
 #include "Orca/OrthographicCameraController.h"
 
-// Renderer
+// Renderer Headers
 #include "Orca/Renderer/Renderer.h"
+#include "Orca/Renderer/Renderer2D.h"
 #include "Orca/Renderer/RenderCommand.h"
 #include "Orca/Renderer/Buffer.h"
 #include "Orca/Renderer/VertexArray.h"
-#include "Orca/Renderer/OrthographicCamera.h"
 #include "Orca/Renderer/Shader.h"
 #include "Orca/Renderer/Texture.h"
+#include "Orca/Renderer/OrthographicCamera.h"
 
 
-// Entry point goes last
-#include "Orca/EntryPoint.h"
+
 
 
 

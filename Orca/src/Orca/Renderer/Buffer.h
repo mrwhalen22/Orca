@@ -1,4 +1,6 @@
 #pragma once
+#include "Orca/Core/Core.h"
+#include "Orca/Core/Log.h"
 
 namespace Orca {
 

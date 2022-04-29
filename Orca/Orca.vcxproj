@@ -140,23 +140,25 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\Orca\OrthographicCameraController.h" />
     <ClInclude Include="src\Orca.h" />
-    <ClInclude Include="src\Orca\Application.h" />
+    <ClInclude Include="src\Orca\Core\Application.h" />
     <ClInclude Include="src\Orca\Core\Core.h" />
+    <ClInclude Include="src\Orca\Core\EntryPoint.h" />
+    <ClInclude Include="src\Orca\Core\Input.h" />
+    <ClInclude Include="src\Orca\Debug\Instrumentor.h" />
+    <ClInclude Include="src\Orca\Core\KeyCodes.h" />
+    <ClInclude Include="src\Orca\Core\Layer.h" />
+    <ClInclude Include="src\Orca\Core\LayerStack.h" />
+    <ClInclude Include="src\Orca\Core\Log.h" />
+    <ClInclude Include="src\Orca\Core\MouseButtonCodes.h" />
     <ClInclude Include="src\Orca\Core\Timestep.h" />
-    <ClInclude Include="src\Orca\EntryPoint.h" />
+    <ClInclude Include="src\Orca\Core\Window.h" />
     <ClInclude Include="src\Orca\Events\ApplicationEvent.h" />
     <ClInclude Include="src\Orca\Events\Event.h" />
     <ClInclude Include="src\Orca\Events\KeyEvent.h" />
     <ClInclude Include="src\Orca\Events\MouseEvent.h" />
     <ClInclude Include="src\Orca\ImGui\ImGuiLayer.h" />
-    <ClInclude Include="src\Orca\Input.h" />
-    <ClInclude Include="src\Orca\KeyCodes.h" />
-    <ClInclude Include="src\Orca\Layer.h" />
-    <ClInclude Include="src\Orca\LayerStack.h" />
-    <ClInclude Include="src\Orca\Log.h" />
-    <ClInclude Include="src\Orca\MouseButtonCodes.h" />
+    <ClInclude Include="src\Orca\OrthographicCameraController.h" />
     <ClInclude Include="src\Orca\Platform\OpenGL\OpenGLBuffer.h" />
     <ClInclude Include="src\Orca\Platform\OpenGL\OpenGLContext.h" />
     <ClInclude Include="src\Orca\Platform\OpenGL\OpenGLRendererAPI.h" />
@@ -170,11 +172,11 @@
     <ClInclude Include="src\Orca\Renderer\OrthographicCamera.h" />
     <ClInclude Include="src\Orca\Renderer\RenderCommand.h" />
     <ClInclude Include="src\Orca\Renderer\Renderer.h" />
+    <ClInclude Include="src\Orca\Renderer\Renderer2D.h" />
     <ClInclude Include="src\Orca\Renderer\RendererAPI.h" />
     <ClInclude Include="src\Orca\Renderer\Shader.h" />
     <ClInclude Include="src\Orca\Renderer\Texture.h" />
     <ClInclude Include="src\Orca\Renderer\VertexArray.h" />
-    <ClInclude Include="src\Orca\Window.h" />
     <ClInclude Include="src\oapch.h" />
     <ClInclude Include="vendor\glm\glm\common.hpp" />
     <ClInclude Include="vendor\glm\glm\detail\_features.hpp" />
@@ -594,13 +596,13 @@
     <ClInclude Include="vendor\stb_image\stb_image.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Orca\OrthographicCameraController.cpp" />
-    <ClCompile Include="src\Orca\Application.cpp" />
+    <ClCompile Include="src\Orca\Core\Application.cpp" />
+    <ClCompile Include="src\Orca\Core\Layer.cpp" />
+    <ClCompile Include="src\Orca\Core\LayerStack.cpp" />
+    <ClCompile Include="src\Orca\Core\Log.cpp" />
     <ClCompile Include="src\Orca\ImGui\ImGuiBuild.cpp" />
     <ClCompile Include="src\Orca\ImGui\ImGuiLayer.cpp" />
-    <ClCompile Include="src\Orca\Layer.cpp" />
-    <ClCompile Include="src\Orca\LayerStack.cpp" />
-    <ClCompile Include="src\Orca\Log.cpp" />
+    <ClCompile Include="src\Orca\OrthographicCameraController.cpp" />
     <ClCompile Include="src\Orca\Platform\OpenGL\OpenGLBuffer.cpp" />
     <ClCompile Include="src\Orca\Platform\OpenGL\OpenGLContext.cpp" />
     <ClCompile Include="src\Orca\Platform\OpenGL\OpenGLRendererAPI.cpp" />
@@ -613,6 +615,7 @@
     <ClCompile Include="src\Orca\Renderer\OrthographicCamera.cpp" />
     <ClCompile Include="src\Orca\Renderer\RenderCommand.cpp" />
     <ClCompile Include="src\Orca\Renderer\Renderer.cpp" />
+    <ClCompile Include="src\Orca\Renderer\Renderer2D.cpp" />
     <ClCompile Include="src\Orca\Renderer\RendererAPI.cpp" />
     <ClCompile Include="src\Orca\Renderer\Shader.cpp" />
     <ClCompile Include="src\Orca\Renderer\Texture.cpp" />

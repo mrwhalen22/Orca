@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Orca/Input.h"
+#include "Orca/Core/Input.h"
 
 namespace Orca {
 

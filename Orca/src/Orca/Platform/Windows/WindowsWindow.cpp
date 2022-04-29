@@ -22,20 +22,24 @@ namespace Orca {
 	}
 
 	WindowsWindow::WindowsWindow(const WindowProps& props) {
+		OA_PROFILE_FUNCTION();
 		Init(props);
 	}
 
 	WindowsWindow::~WindowsWindow() {
+		OA_PROFILE_FUNCTION();
 		Shutdown();
 	}
 
 	void WindowsWindow::Init(const WindowProps& props) {
+		OA_PROFILE_FUNCTION();
 		m_Data.Title = props.Title;
 		m_Data.Width = props.Width;
 		m_Data.Height = props.Height;
 
 		OA_CORE_INFO("Creating window {0} ({1}, {2})", props.Title, props.Width, props.Height);
 
+		// initialize glfw
 		if (!s_GLFWInitialized) {
 			int success = glfwInit();
 			OA_CORE_ASSERT(success, "Could not initlalize GLFW!");
@@ -45,8 +49,10 @@ namespace Orca {
 			s_GLFWInitialized = true;
 		}
 
+		// define the window
 		m_Window = glfwCreateWindow((int)props.Width, (int)props.Height, m_Data.Title.c_str(), nullptr, nullptr);
 		
+		// get new context
 		m_Context = new OpenGLContext(m_Window);
 		m_Context->Init();
 
@@ -137,16 +143,19 @@ namespace Orca {
 	}
 
 	void WindowsWindow::Shutdown() {
+		OA_PROFILE_FUNCTION();
 		glfwDestroyWindow(m_Window);
 		delete m_Context;
 	}
 
 	void WindowsWindow::OnUpdate() {
+		OA_PROFILE_FUNCTION();
 		glfwPollEvents();
 		m_Context->SwapBuffers();
 	}
 
 	void WindowsWindow::SetVSync(bool enabled) {
+		OA_PROFILE_FUNCTION();
 		if (enabled)
 			glfwSwapInterval(1);
 		else

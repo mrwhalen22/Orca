@@ -1,7 +1,7 @@
 #include "oapch.h"
 #include "OrthographicCameraController.h"
-#include "Orca/Input.h"
-#include "Orca/KeyCodes.h"
+#include "Orca/Core/Input.h"
+#include "Orca/Core/KeyCodes.h"
 #include "Orca/Core/Core.h"
 
 
@@ -15,6 +15,7 @@ namespace Orca {
 	}
 
 	void OrthographicCameraController::OnUpdate(Timestep ts) {
+		OA_PROFILE_FUNCTION();
 		if (Input::IsKeyPressed(OA_KEY_W)) 
 			m_CameraPosition.y += m_CameraTranslationSpeed * ts;
 		else if (Input::IsKeyPressed(OA_KEY_S)) 
@@ -42,12 +43,14 @@ namespace Orca {
 	}
 
 	void OrthographicCameraController::OnEvent(Event& e) {
+		OA_PROFILE_FUNCTION();
 		EventDispatcher dispatcher(e);
 		dispatcher.Dispatch<MouseScrolledEvent>(OA_BIND_EVENT_FN(OrthographicCameraController::OnMouseScrolled));
 		dispatcher.Dispatch<WindowResizeEvent>(OA_BIND_EVENT_FN(OrthographicCameraController::OnWindowResized));
 	}
 
 	bool OrthographicCameraController::OnMouseScrolled(MouseScrolledEvent& e) {
+		OA_PROFILE_FUNCTION();
 		m_ZoomLevel -= e.GetYOffset() * 0.5f;
 		m_ZoomLevel = std::max(m_ZoomLevel, 0.1f);
 		m_ZoomLevel = std::min(m_ZoomLevel, 15.0f);
@@ -59,6 +62,7 @@ namespace Orca {
 	}
 
 	bool OrthographicCameraController::OnWindowResized(WindowResizeEvent& e) {
+		OA_PROFILE_FUNCTION();
 		m_AspectRatio = (float)e.GetWidth() / (float)e.GetHeight();
 		m_Camera.SetProjection(-m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel);
 		return true;

@@ -1,8 +1,10 @@
 #include "oapch.h"
 #include "WindowsInput.h"
 
+#include "Orca/Core/Application.h"
+
 #include <GLFW/glfw3.h>
-#include "Orca/Application.h"
+
 
 namespace Orca {
 

@@ -1,6 +1,6 @@
 #include "oapch.h"
 #include "ImGuiLayer.h"
-#include "Orca/Application.h"
+#include "Orca/Core/Application.h"
 
 #include "imgui.h"
 
@@ -24,7 +24,7 @@ namespace Orca {
 	}
 
 	void ImGuiLayer::OnAttach() {
-
+		OA_PROFILE_FUNCTION();
 		// setup dear ImGui context
 		IMGUI_CHECKVERSION();
 		ImGui::CreateContext();
@@ -51,12 +51,14 @@ namespace Orca {
 	}
 
 	void ImGuiLayer::OnDetach() {
+		OA_PROFILE_FUNCTION();
 		ImGui_ImplOpenGL3_Shutdown();
 		ImGui_ImplGlfw_Shutdown();
 		ImGui::DestroyContext();
 	}
 
 	void ImGuiLayer::OnImGuiRender() {
+		OA_PROFILE_FUNCTION();
 		static bool show = true;
 		//ImGui::ShowDemoWindow(&show);
 
@@ -64,12 +66,14 @@ namespace Orca {
 	}
 
 	void ImGuiLayer::Begin() {
+		OA_PROFILE_FUNCTION();
 		ImGui_ImplGlfw_NewFrame();
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui::NewFrame();
 	}
 
 	void ImGuiLayer::End() {
+		OA_PROFILE_FUNCTION();
 		ImGuiIO& io = ImGui::GetIO();
 		Application& app = Application::Get();
 		io.DisplaySize = ImVec2((float)app.GetWindow().GetWidth(), (float)app.GetWindow().GetHeight());

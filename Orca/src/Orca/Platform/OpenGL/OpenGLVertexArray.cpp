@@ -22,15 +22,14 @@ namespace Orca {
 			case ShaderDataType::Mat4:		return GL_FLOAT;
 			case ShaderDataType::Bool:		return GL_BOOL;
 
-				OA_CORE_ASSERT(false, "Unknown ShaderDataType!");
-				return 0;
-
-
 			}
+			OA_CORE_ASSERT(false, "Unknown ShaderDataType!");
+			return 0;
 
 		}
 
 		OpenGLVertexArray::OpenGLVertexArray() {
+			OA_PROFILE_FUNCTION();
 			glCreateVertexArrays(1, &m_RendererID);
 		}
 
@@ -39,14 +38,17 @@ namespace Orca {
 		}
 
 		void OpenGLVertexArray::Bind() const {
+			OA_PROFILE_FUNCTION();
 			glBindVertexArray(m_RendererID);
 		}
 
 		void OpenGLVertexArray::Unbind() const {
+			OA_PROFILE_FUNCTION();
 			glBindVertexArray(0);
 		}
 
 		void OpenGLVertexArray::AddVertexBuffer(const std::shared_ptr<VertexBuffer>& vb) {
+			OA_PROFILE_FUNCTION();
 			glBindVertexArray(m_RendererID);
 			vb->Bind();
 
@@ -67,6 +69,7 @@ namespace Orca {
 		}
 
 		void OpenGLVertexArray::SetIndexBuffer(const std::shared_ptr<IndexBuffer>& ib) {
+			OA_PROFILE_FUNCTION();
 			glBindVertexArray(m_RendererID);
 			ib->Bind();
 
