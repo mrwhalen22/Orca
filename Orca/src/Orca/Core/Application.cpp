@@ -20,17 +20,16 @@ namespace Orca
 	{	
 		OA_PROFILE_FUNCTION();
 
+		// init the singleton and the window
 		s_Instance = this;
-
 		m_Window = Scope<Window>(Window::Create());
 		m_Window->SetEventCallback(OA_BIND_EVENT_FN(Application::OnEvent));
 
+		// init renderer and imgui
 		Renderer::Init();
-
 		m_ImGuiLayer = new ImGuiLayer;
 		PushOverlay(m_ImGuiLayer);
 
-		
 		
 	}
 
@@ -58,6 +57,7 @@ namespace Orca
 		dispatcher.Dispatch<WindowCloseEvent>(OA_BIND_EVENT_FN(Application::OnWindowClose));
 		dispatcher.Dispatch<WindowResizeEvent>(OA_BIND_EVENT_FN(Application::OnWindowResized));
 
+		// pass the event to each layer in the stack
 		for (auto it = m_LayerStack.end(); it != m_LayerStack.begin();)
 		{
 			(*--it)->OnEvent(e);
@@ -76,10 +76,12 @@ namespace Orca
 
 	bool Application::OnWindowResized(WindowResizeEvent& e) {
 		OA_PROFILE_FUNCTION();
+		// Check that the window isn't resized to 0
 		if (e.GetWidth() == 0 || e.GetHeight() == 0) {
 			m_Minimized = true;
 		}
 		m_Minimized = false;
+		// Pass down to the renderer
 		Renderer::OnWindowResize(e.GetWidth(), e.GetHeight());
 
 		return false;

@@ -12,6 +12,7 @@ namespace Orca {
 		for (Layer* layer : m_Layers) delete layer;
 	}
 
+	// Base Layer Functions
 	void LayerStack::PushLayer(Layer* layer) {
 		OA_PROFILE_FUNCTION();
 		m_Layers.emplace(m_Layers.begin() + m_LayerInsertIndex, layer);
@@ -27,6 +28,8 @@ namespace Orca {
 			m_LayerInsertIndex--;
 		}
 	}
+
+	// Overlay functions
 	void LayerStack::PushOverlay(Layer* overlay) {
 		OA_PROFILE_FUNCTION();
 		m_Layers.emplace_back(overlay);

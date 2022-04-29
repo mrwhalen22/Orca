@@ -39,6 +39,7 @@ namespace Orca {
 
 		OA_CORE_INFO("Creating window {0} ({1}, {2})", props.Title, props.Width, props.Height);
 
+		// initialize glfw
 		if (!s_GLFWInitialized) {
 			int success = glfwInit();
 			OA_CORE_ASSERT(success, "Could not initlalize GLFW!");
@@ -48,8 +49,10 @@ namespace Orca {
 			s_GLFWInitialized = true;
 		}
 
+		// define the window
 		m_Window = glfwCreateWindow((int)props.Width, (int)props.Height, m_Data.Title.c_str(), nullptr, nullptr);
 		
+		// get new context
 		m_Context = new OpenGLContext(m_Window);
 		m_Context->Init();
 
