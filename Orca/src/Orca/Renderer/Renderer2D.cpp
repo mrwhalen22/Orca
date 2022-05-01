@@ -26,6 +26,9 @@ namespace Orca {
 		const uint32_t MaxIndices = MaxQuads * 6;
 		static const uint32_t MaxTextureSlots = 32;
 
+		glm::vec4 QuadVertices[4];
+
+
 		Ref<VertexArray> VertexArray;
 		Ref<VertexBuffer> VertexBuffer;
 		Ref<Shader> GenericShader;
@@ -96,6 +99,11 @@ namespace Orca {
 
 		s_Data.QuadTextureSlots[0] = s_Data.WhiteTexture;
 	
+		s_Data.QuadVertices[0] = { -0.5f, -0.5f, 0.0f, 1.0f };
+		s_Data.QuadVertices[1] = {  0.5f, -0.5f, 0.0f, 1.0f };
+		s_Data.QuadVertices[2] = {  0.5f,  0.5f, 0.0f, 1.0f };
+		s_Data.QuadVertices[3] = { -0.5f,  0.5f, 0.0f, 1.0f };
+
 	}
 
 	void Renderer2D::Shutdown() {
@@ -144,33 +152,7 @@ namespace Orca {
 	}
 
 	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color) {
-		OA_PROFILE_FUNCTION();
-
-		s_Data.QuadVertexBufferPtr->Position = position;
-		s_Data.QuadVertexBufferPtr->Color = color;
-		s_Data.QuadVertexBufferPtr->TexCoord = { 0.0f, 0.0f };
-		s_Data.QuadVertexBufferPtr->TexIndex = 0.0f;
-		s_Data.QuadVertexBufferPtr++;
-
-		s_Data.QuadVertexBufferPtr->Position = { position.x + size.x, position.y, 0.0f };
-		s_Data.QuadVertexBufferPtr->Color = color;
-		s_Data.QuadVertexBufferPtr->TexCoord = { 1.0f, 0.0f };
-		s_Data.QuadVertexBufferPtr->TexIndex = 0.0f;
-		s_Data.QuadVertexBufferPtr++;
-
-		s_Data.QuadVertexBufferPtr->Position = { position.x + size.x, position.y + size.y, 0.0f };
-		s_Data.QuadVertexBufferPtr->Color = color;
-		s_Data.QuadVertexBufferPtr->TexCoord = { 1.0f, 1.0f };
-		s_Data.QuadVertexBufferPtr->TexIndex = 0.0f;
-		s_Data.QuadVertexBufferPtr++;
-
-		s_Data.QuadVertexBufferPtr->Position = { position.x, position.y + size.y, 0.0f };
-		s_Data.QuadVertexBufferPtr->Color = color;
-		s_Data.QuadVertexBufferPtr->TexCoord = { 0.0f, 1.0f };
-		s_Data.QuadVertexBufferPtr->TexIndex = 0.0f;
-		s_Data.QuadVertexBufferPtr++;
-
-		s_Data.QuadIndexCount += 6;
+		DrawQuad(position, size, 0.0f, s_Data.WhiteTexture, color);
 	}
 
 	void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const float angle_rads, const glm::vec4& color) {
@@ -210,25 +192,39 @@ namespace Orca {
 			s_Data.TextureSlotIndex++;
 		}
 
-		s_Data.QuadVertexBufferPtr->Position = position;
+		glm::mat4 transform = glm::mat4(1.0f);
+		
+		if (position != glm::vec3(0.0f)) {
+			transform *= glm::translate(glm::mat4(1.0f), position);
+		}
+
+		if (angle_rads != 0.0f) {
+			transform *= glm::rotate(glm::mat4(1.0f), angle_rads, { 0.0f, 0.0f, 1.0f });
+		}
+		
+		if(size != glm::vec2(1.0f)) {
+			transform *= glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
+		} 
+
+		s_Data.QuadVertexBufferPtr->Position = transform * s_Data.QuadVertices[0];
 		s_Data.QuadVertexBufferPtr->Color = color;
 		s_Data.QuadVertexBufferPtr->TexCoord = {0.0f, 0.0f};
 		s_Data.QuadVertexBufferPtr->TexIndex = textureIndex;
 		s_Data.QuadVertexBufferPtr++;
 
-		s_Data.QuadVertexBufferPtr->Position = { position.x + size.x, position.y, 0.0f };
+		s_Data.QuadVertexBufferPtr->Position = transform * s_Data.QuadVertices[1];
 		s_Data.QuadVertexBufferPtr->Color = color;
 		s_Data.QuadVertexBufferPtr->TexCoord = { 1.0f, 0.0f };
 		s_Data.QuadVertexBufferPtr->TexIndex = textureIndex;
 		s_Data.QuadVertexBufferPtr++;
 
-		s_Data.QuadVertexBufferPtr->Position = { position.x + size.x, position.y + size.y, 0.0f };
+		s_Data.QuadVertexBufferPtr->Position = transform * s_Data.QuadVertices[2];
 		s_Data.QuadVertexBufferPtr->Color = color;
 		s_Data.QuadVertexBufferPtr->TexCoord = { 1.0f, 1.0f };
 		s_Data.QuadVertexBufferPtr->TexIndex = textureIndex;
 		s_Data.QuadVertexBufferPtr++;
 
-		s_Data.QuadVertexBufferPtr->Position = { position.x, position.y + size.y, 0.0f };
+		s_Data.QuadVertexBufferPtr->Position = transform * s_Data.QuadVertices[3];
 		s_Data.QuadVertexBufferPtr->Color = color;
 		s_Data.QuadVertexBufferPtr->TexCoord = { 0.0f, 1.0f };
 		s_Data.QuadVertexBufferPtr->TexIndex = textureIndex;
@@ -240,36 +236,7 @@ namespace Orca {
 
 	void Renderer2D::DrawQuad(const QuadProps& props) {
 		OA_PROFILE_FUNCTION();
-		
-		// set uniforms
-		s_Data.GenericShader->Bind();
-		s_Data.GenericShader->SetFloat4("u_Color", props.color);
-		s_Data.GenericShader->SetFloat("u_TilingFactor", props.tilingFactor);
-
-		// check and bind texture (white if not specified)
-		if (props.texture)
-			props.texture->Bind();
-		else
-			s_Data.WhiteTexture->Bind();
-
-		// set the transform -- if no rotation do not calculate it
-		glm::mat4 transform;
-		if (props.rotation_rads == 0.0f) {
-			transform = glm::translate(glm::mat4(1.0f), props.position) *
-				glm::scale(glm::mat4(1.0f), { props.size.x, props.size.y, 1.0f });
-		}
-		else {
-			transform = glm::translate(glm::mat4(1.0f), props.position) *
-				glm::rotate(glm::mat4(1.0f), props.rotation_rads, { 0.0f, 0.0f, 1.0f }) *
-				glm::scale(glm::mat4(1.0f), { props.size.x, props.size.y, 1.0f });
-		}
-		
-		// set transform
-		s_Data.GenericShader->SetMat4("u_Transform", transform);
-
-		// send the draw call
-		s_Data.VertexArray->Bind();
-		RenderCommand::DrawIndexed(s_Data.VertexArray);
+		DrawQuad(props.position, props.size, props.rotation_rads, props.texture, props.color);
 	}
 
 
