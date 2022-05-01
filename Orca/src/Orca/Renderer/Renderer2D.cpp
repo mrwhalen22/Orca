@@ -16,6 +16,7 @@ namespace Orca {
 		glm::vec3 Position;
 		glm::vec4 Color;
 		glm::vec2 TexCoord;
+		float TexIndex;
 
 	};
 
@@ -23,15 +24,21 @@ namespace Orca {
 		const uint32_t MaxQuads = 10000;
 		const uint32_t MaxVertices = MaxQuads * 4;
 		const uint32_t MaxIndices = MaxQuads * 6;
+		static const uint32_t MaxTextureSlots = 32;
 
 		Ref<VertexArray> VertexArray;
 		Ref<VertexBuffer> VertexBuffer;
 		Ref<Shader> GenericShader;
 		Ref<Texture2D> WhiteTexture;
 
+
 		uint32_t QuadIndexCount = 0;
 		QuadVertex* QuadVertexBufferBase = nullptr;
 		QuadVertex* QuadVertexBufferPtr = nullptr;
+
+		std::array<Ref<Texture2D>, MaxTextureSlots> QuadTextureSlots;
+		uint32_t TextureSlotIndex = 1;
+
 	};
 
 	
@@ -46,7 +53,8 @@ namespace Orca {
 		BufferLayout layout = {
 			{ShaderDataType::Float3, "a_Position"},
 			{ShaderDataType::Float4, "a_Color"   },
-			{ShaderDataType::Float2, "a_TexCoord"}
+			{ShaderDataType::Float2, "a_TexCoord"},
+			{ShaderDataType::Float,  "a_TexIndex"}
 		};
 		s_Data.VertexBuffer->SetLayout(layout);
 		s_Data.VertexArray->AddVertexBuffer(s_Data.VertexBuffer);
@@ -76,8 +84,18 @@ namespace Orca {
 		uint32_t whiteTextureData = 0xffffffff;
 		s_Data.WhiteTexture->SetData(&whiteTextureData, sizeof(whiteTextureData));
 
+		int32_t samplers[s_Data.MaxTextureSlots];
+		for (int32_t i = 0; i < s_Data.MaxTextureSlots; i++) {
+			samplers[i] = i;
+		}
+
+
 		s_Data.GenericShader = Shader::Create("assets/shaders/Renderer2DGeneric.glsl");
-		s_Data.GenericShader->SetInt("u_Texture", 0);
+		s_Data.GenericShader->Bind();
+		s_Data.GenericShader->SetIntArray("u_Textures", samplers, s_Data.MaxTextureSlots);
+
+		s_Data.QuadTextureSlots[0] = s_Data.WhiteTexture;
+	
 	}
 
 	void Renderer2D::Shutdown() {
@@ -91,6 +109,8 @@ namespace Orca {
 
 		s_Data.QuadIndexCount = 0;
 		s_Data.QuadVertexBufferPtr = s_Data.QuadVertexBufferBase;
+
+		s_Data.TextureSlotIndex = 1;
 	}
 	void Renderer2D::EndScene() {
 		OA_PROFILE_FUNCTION();
@@ -102,6 +122,9 @@ namespace Orca {
 	}
 
 	void Renderer2D::Flush() {
+		for (uint32_t i = 0; i < s_Data.TextureSlotIndex; i++) {
+			s_Data.QuadTextureSlots[i]->Bind(i);
+		}
 		RenderCommand::DrawIndexed(s_Data.VertexArray, s_Data.QuadIndexCount);
 
 	}
@@ -126,21 +149,25 @@ namespace Orca {
 		s_Data.QuadVertexBufferPtr->Position = position;
 		s_Data.QuadVertexBufferPtr->Color = color;
 		s_Data.QuadVertexBufferPtr->TexCoord = { 0.0f, 0.0f };
+		s_Data.QuadVertexBufferPtr->TexIndex = 0.0f;
 		s_Data.QuadVertexBufferPtr++;
 
 		s_Data.QuadVertexBufferPtr->Position = { position.x + size.x, position.y, 0.0f };
 		s_Data.QuadVertexBufferPtr->Color = color;
 		s_Data.QuadVertexBufferPtr->TexCoord = { 1.0f, 0.0f };
+		s_Data.QuadVertexBufferPtr->TexIndex = 0.0f;
 		s_Data.QuadVertexBufferPtr++;
 
 		s_Data.QuadVertexBufferPtr->Position = { position.x + size.x, position.y + size.y, 0.0f };
 		s_Data.QuadVertexBufferPtr->Color = color;
 		s_Data.QuadVertexBufferPtr->TexCoord = { 1.0f, 1.0f };
+		s_Data.QuadVertexBufferPtr->TexIndex = 0.0f;
 		s_Data.QuadVertexBufferPtr++;
 
 		s_Data.QuadVertexBufferPtr->Position = { position.x, position.y + size.y, 0.0f };
 		s_Data.QuadVertexBufferPtr->Color = color;
 		s_Data.QuadVertexBufferPtr->TexCoord = { 0.0f, 1.0f };
+		s_Data.QuadVertexBufferPtr->TexIndex = 0.0f;
 		s_Data.QuadVertexBufferPtr++;
 
 		s_Data.QuadIndexCount += 6;
@@ -169,47 +196,46 @@ namespace Orca {
 	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const float angle_rads, const Ref<Texture2D>& texture, const glm::vec4& color) {
 		OA_PROFILE_FUNCTION();
 
+		float textureIndex = 0.0f;
+		for (uint32_t i = 1; i < s_Data.TextureSlotIndex; i++) {
+			if (*s_Data.QuadTextureSlots[i].get() == *texture.get()) {
+				textureIndex = (float)i;
+				break;
+			}
+		}
+
+		if (textureIndex == 0.0f) {
+			textureIndex = (float)s_Data.TextureSlotIndex;
+			s_Data.QuadTextureSlots[s_Data.TextureSlotIndex] = texture;
+			s_Data.TextureSlotIndex++;
+		}
+
 		s_Data.QuadVertexBufferPtr->Position = position;
 		s_Data.QuadVertexBufferPtr->Color = color;
 		s_Data.QuadVertexBufferPtr->TexCoord = {0.0f, 0.0f};
+		s_Data.QuadVertexBufferPtr->TexIndex = textureIndex;
 		s_Data.QuadVertexBufferPtr++;
 
 		s_Data.QuadVertexBufferPtr->Position = { position.x + size.x, position.y, 0.0f };
 		s_Data.QuadVertexBufferPtr->Color = color;
 		s_Data.QuadVertexBufferPtr->TexCoord = { 1.0f, 0.0f };
+		s_Data.QuadVertexBufferPtr->TexIndex = textureIndex;
 		s_Data.QuadVertexBufferPtr++;
 
 		s_Data.QuadVertexBufferPtr->Position = { position.x + size.x, position.y + size.y, 0.0f };
 		s_Data.QuadVertexBufferPtr->Color = color;
 		s_Data.QuadVertexBufferPtr->TexCoord = { 1.0f, 1.0f };
+		s_Data.QuadVertexBufferPtr->TexIndex = textureIndex;
 		s_Data.QuadVertexBufferPtr++;
 
 		s_Data.QuadVertexBufferPtr->Position = { position.x, position.y + size.y, 0.0f };
 		s_Data.QuadVertexBufferPtr->Color = color;
 		s_Data.QuadVertexBufferPtr->TexCoord = { 0.0f, 1.0f };
+		s_Data.QuadVertexBufferPtr->TexIndex = textureIndex;
 		s_Data.QuadVertexBufferPtr++;
 
 		s_Data.QuadIndexCount += 6;
 
-		/*s_Data.GenericShader->Bind();
-		s_Data.GenericShader->SetFloat("u_TilingFactor", 1.0f);
-
-		texture->Bind();
-
-		if (angle_rads == 0.0f) {
-			glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) *
-				glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
-			s_Data.GenericShader->SetMat4("u_Transform", transform);
-		}
-		else {
-			glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) *
-				glm::rotate(glm::mat4(1.0f), angle_rads, { 0.0f, 0.0f, 1.0f }) *
-				glm::scale(glm::mat4(1.0f), {size.x, size.y, 1.0f });
-			s_Data.GenericShader->SetMat4("u_Transform", transform);
-		}
-		
-		s_Data.VertexArray->Bind();
-		RenderCommand::DrawIndexed(s_Data.VertexArray);*/
 	}
 
 	void Renderer2D::DrawQuad(const QuadProps& props) {

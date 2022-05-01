@@ -87,6 +87,10 @@ namespace Orca {
 		UploadUniformInt(name, value);
 	}
 
+	void OpenGLShader::SetIntArray(const std::string& name, int* values, uint32_t count) {
+		UploadUniformIntArray(name, values, count);
+	}
+
 
 	void OpenGLShader::UploadUniformMat3(const std::string& name, const glm::mat3& matrix)
 	{
@@ -123,6 +127,10 @@ namespace Orca {
 	void OpenGLShader::UploadUniformInt(const std::string& name, const int value)
 	{
 		glUniform1i(GetUniformLocation(name), value);
+	}
+
+	void OpenGLShader::UploadUniformIntArray(const std::string& name, int* values, uint32_t count) {
+		glUniform1iv(GetUniformLocation(name), count, values);
 	}
 
 	void OpenGLShader::Compile(std::unordered_map<GLenum, std::string> sources) {
