@@ -13,7 +13,11 @@ Sandbox2D::Sandbox2D()
 void Sandbox2D::OnAttach() {
 	OA_PROFILE_FUNCTION();
 	m_Texture = Texture2D::Create("assets/textures/orca.png");
+	m_SpriteSheet = Texture2D::Create("assets/game/RPGpack_sheet_2X.png");
+	m_SubTexture = SubTexture2D::CreateFromCoords(m_SpriteSheet, {2, 1}, {128, 128}, {1, 2});
+
 }
+
 
 
 void Sandbox2D::OnDetach() {
@@ -22,7 +26,7 @@ void Sandbox2D::OnDetach() {
 
 void Sandbox2D::OnUpdate(Orca::Timestep ts) {
 	OA_PROFILE_FUNCTION();
-	angle += 1*ts;
+	//angle += 1*ts;
 
 	Renderer2D::ResetStats();
 	m_CameraController.OnUpdate(ts);
@@ -34,8 +38,9 @@ void Sandbox2D::OnUpdate(Orca::Timestep ts) {
 	Renderer2D::BeginScene(m_CameraController.GetCamera());
 	for (float y = -5.0f; y < 5.0f; y += 0.5f) {
 		for (float x = -5.0f; x < 5.0f; x += 0.5f) {
+			OA_PROFILE_SCOPE("1 Quad");
 			glm::vec3 color = { (x + 5.0f) / 10.0f, 0.3f, (y + 5.0f) / 10.0f };
-			Renderer2D::DrawQuad({ x, y }, { 0.45f, 0.45f }, { color.r, color.g, color.b, 0.6f });
+			Renderer2D::DrawQuad({ x, y, -0.1f }, { 0.25f, 0.25f }, { color.r, color.g, color.b, 0.6f });
 		}
 	}
 
@@ -44,11 +49,16 @@ void Sandbox2D::OnUpdate(Orca::Timestep ts) {
 
 	Renderer2D::BeginScene(m_CameraController.GetCamera());
 
-	Renderer2D::DrawQuad({ -1.0f, -0.75f, 0.9f }, { 1,2 }, m_Color);
-	Renderer2D::DrawQuad({ { 0.5f, -0.75f, 1.0f }, { 1.0f, 1.0f }, angle, m_Texture, m_Color });
-	Renderer2D::DrawQuad({ -0.5f, -0.6f, 1.0f }, { 0.5f, 0.5f }, glm::radians(45.0f), m_Texture, { 1.0f,1.0f,1.0f,1.0f });
+	Renderer2D::DrawQuad({ -1.0f, -0.75f, 0.0f }, { 1,2 }, m_Color);
+	//Renderer2D::DrawQuad({ { 0.5f, -0.75f, 1.0f }, { 1.0f, 1.0f }, angle, m_Texture, m_Color });
+	Renderer2D::DrawQuad({ 0.5f, -0.6f, 0.0f }, { 0.5f, 0.5f }, glm::radians(45.0f), m_Texture, { 1.0f,1.0f,1.0f,1.0f });
 	
 
+	Renderer2D::EndScene();
+
+
+	Renderer2D::BeginScene(m_CameraController.GetCamera());
+	Renderer2D::DrawQuad({ -2.5f, -2.6f, 0.0f }, { 1.0f, 2.0f }, 0.0f, m_SubTexture, { 1.0f,1.0f,1.0f,1.0f });
 	Renderer2D::EndScene();
 
 

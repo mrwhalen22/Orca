@@ -202,7 +202,7 @@ namespace Orca {
 	}
 }
 
-#define OA_PROFILE 1
+#define OA_PROFILE 0
 #if OA_PROFILE
 // Resolve which function signature macro will be used. Note that this only
 // is resolved when the (pre)compiler starts, so the syntax highlighting

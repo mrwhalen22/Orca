@@ -58,7 +58,7 @@ namespace Orca {
 
 
 		glfwSetWindowUserPointer(m_Window, &m_Data);
-		SetVSync(true);
+		SetVSync(false);
 
 		// set GLFW callbacks --------------------------------------------------------------
 

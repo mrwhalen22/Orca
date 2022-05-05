@@ -4,6 +4,7 @@
 #include "VertexArray.h"
 #include "Shader.h"
 #include "RenderCommand.h"
+#include "SubTexture2D.h"
 
 #include <glm/ext/matrix_transform.hpp>
 
@@ -248,6 +249,79 @@ namespace Orca {
 		s_Data.QuadVertexBufferPtr->Position = (transform == glm::mat4(1.0f)) ? s_Data.QuadVertices[3] : (transform * s_Data.QuadVertices[3]);
 		s_Data.QuadVertexBufferPtr->Color = color;
 		s_Data.QuadVertexBufferPtr->TexCoord = { 0.0f, 1.0f };
+		s_Data.QuadVertexBufferPtr->TexIndex = textureIndex;
+		s_Data.QuadVertexBufferPtr++;
+
+		s_Data.QuadIndexCount += 6;
+
+
+		s_Data.Stats.QuadCount++;
+	}
+
+	void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const float angle_rads, const Ref<SubTexture2D>& subtexture, const glm::vec4& color) {
+		DrawQuad({ position.x, position.y, 0.0f }, size, angle_rads, subtexture, color);
+	}
+
+	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const float angle_rads, const Ref<SubTexture2D>& subtexture, const glm::vec4& color) {
+		OA_PROFILE_FUNCTION();
+
+		const Ref<Texture2D> texture = subtexture->GetTexture();
+
+		if (s_Data.QuadIndexCount >= Renderer2DData::MaxIndices) {
+			FlushAndReset();
+		}
+
+		float textureIndex = 0.0f;
+		for (uint32_t i = 1; i < s_Data.TextureSlotIndex; i++) {
+			if (*s_Data.QuadTextureSlots[i].get() == *texture.get()) {
+				textureIndex = (float)i;
+				break;
+			}
+		}
+
+		if (textureIndex == 0.0f) {
+			textureIndex = (float)s_Data.TextureSlotIndex;
+			s_Data.QuadTextureSlots[s_Data.TextureSlotIndex] = texture;
+			s_Data.TextureSlotIndex++;
+		}
+
+		glm::mat4 transform = glm::mat4(1.0f);
+
+		if (position != glm::vec3(0.0f)) {
+			transform *= glm::translate(glm::mat4(1.0f), position);
+		}
+
+		if (angle_rads != 0.0f) {
+			transform *= glm::rotate(glm::mat4(1.0f), angle_rads, { 0.0f, 0.0f, 1.0f });
+		}
+
+		if (size != glm::vec2(1.0f)) {
+			transform *= glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
+		}
+
+		const glm::vec2* TexCoords = subtexture->GetTexCoords();
+
+		s_Data.QuadVertexBufferPtr->Position = (transform == glm::mat4(1.0f)) ? s_Data.QuadVertices[0] : (transform * s_Data.QuadVertices[0]);
+		s_Data.QuadVertexBufferPtr->Color = color;
+		s_Data.QuadVertexBufferPtr->TexCoord = TexCoords[0];
+		s_Data.QuadVertexBufferPtr->TexIndex = textureIndex;
+		s_Data.QuadVertexBufferPtr++;
+
+		s_Data.QuadVertexBufferPtr->Position = (transform == glm::mat4(1.0f)) ? s_Data.QuadVertices[1] : (transform * s_Data.QuadVertices[1]);
+		s_Data.QuadVertexBufferPtr->Color = color;
+		s_Data.QuadVertexBufferPtr->TexCoord = TexCoords[1];
+		s_Data.QuadVertexBufferPtr->TexIndex = textureIndex;
+		s_Data.QuadVertexBufferPtr++;
+
+		s_Data.QuadVertexBufferPtr->Position = (transform == glm::mat4(1.0f)) ? s_Data.QuadVertices[2] : (transform * s_Data.QuadVertices[2]);
+		s_Data.QuadVertexBufferPtr->Color = color;
+		s_Data.QuadVertexBufferPtr->TexCoord = TexCoords[2];
+		s_Data.QuadVertexBufferPtr->TexIndex = textureIndex;
+		s_Data.QuadVertexBufferPtr++;
+
+		s_Data.QuadVertexBufferPtr->Position = (transform == glm::mat4(1.0f)) ? s_Data.QuadVertices[3] : (transform * s_Data.QuadVertices[3]);
+		s_Data.QuadVertexBufferPtr->Color = color;
+		s_Data.QuadVertexBufferPtr->TexCoord = TexCoords[3];
 		s_Data.QuadVertexBufferPtr->TexIndex = textureIndex;
 		s_Data.QuadVertexBufferPtr++;
 

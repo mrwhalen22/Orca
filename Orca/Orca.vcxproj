@@ -175,6 +175,7 @@
     <ClInclude Include="src\Orca\Renderer\Renderer2D.h" />
     <ClInclude Include="src\Orca\Renderer\RendererAPI.h" />
     <ClInclude Include="src\Orca\Renderer\Shader.h" />
+    <ClInclude Include="src\Orca\Renderer\SubTexture2D.h" />
     <ClInclude Include="src\Orca\Renderer\Texture.h" />
     <ClInclude Include="src\Orca\Renderer\VertexArray.h" />
     <ClInclude Include="src\oapch.h" />
@@ -618,6 +619,7 @@
     <ClCompile Include="src\Orca\Renderer\Renderer2D.cpp" />
     <ClCompile Include="src\Orca\Renderer\RendererAPI.cpp" />
     <ClCompile Include="src\Orca\Renderer\Shader.cpp" />
+    <ClCompile Include="src\Orca\Renderer\SubTexture2D.cpp" />
     <ClCompile Include="src\Orca\Renderer\Texture.cpp" />
     <ClCompile Include="src\Orca\Renderer\VertexArray.cpp" />
     <ClCompile Include="src\oapch.cpp">
