@@ -3,6 +3,23 @@
 
 using namespace Orca;
 
+static const uint32_t s_MapWidth = 24;
+static const char* s_MapTiles = "WWWWWWWWWWWWWWWWWWWWWWWW"
+								"WWWWWWWDDDDDDDWWWWWWWWWW"
+								"WWWWWWDDDDDDDDDDDWWWWWWW"
+								"WWWWWWDDDDDDDDDDDDDWWWWW"
+								"WWWWDDDDDDDDDDDDDDDDWWWW"
+								"WWDDDDDDDDDDDDDDDDDDDWWW"
+								"WWDDDDDDDDDDDDDDDDDDDWWW"
+								"WWDDDDDDDDDDDDDDDDDDDWWW"
+								"WDDDDDDDDDDDDDDDDDDDDDWW"
+								"WWWDDDDDDDDDDDDDDDDDWWWW"
+								"WWWWDDDDDDDDDDDDDDWWWWWW"
+								"WWWWWWWWDDDDDDDWWWWWWWWW"
+								"WWWWWWWWWWWWWWWWWWWWWWWW"
+								"WWWWWWWWWWWWWWWWWWWWWWWW"
+								"WWWWWWWWWWWWWWWWWWWWWWWW"
+								"WWWWWWWWWWWWWWWWWWWWWWWW";
 
 Sandbox2D::Sandbox2D() 
 	: Layer("Sandbox2D"), m_CameraController(16.0f / 9.0f)
@@ -14,8 +31,12 @@ void Sandbox2D::OnAttach() {
 	OA_PROFILE_FUNCTION();
 	m_Texture = Texture2D::Create("assets/textures/orca.png");
 	m_SpriteSheet = Texture2D::Create("assets/game/RPGpack_sheet_2X.png");
-	m_SubTexture = SubTexture2D::CreateFromCoords(m_SpriteSheet, {2, 1}, {128, 128}, {1, 2});
+	m_TileMap['W'] = SubTexture2D::CreateFromCoords(m_SpriteSheet, {11, 11}, {128, 128}, {1, 1});
+	m_TileMap['D'] = SubTexture2D::CreateFromCoords(m_SpriteSheet, { 6, 11 }, { 128, 128 }, { 1, 1 });
+	m_CameraController.SetZoomLevel(5.0f);
 
+	m_MapWidth = s_MapWidth;
+	m_MapHeight = strlen(s_MapTiles) / s_MapWidth;
 }
 
 
@@ -33,32 +54,17 @@ void Sandbox2D::OnUpdate(Orca::Timestep ts) {
 
 	RenderCommand::Clear();
 	RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
-	
+
 
 	Renderer2D::BeginScene(m_CameraController.GetCamera());
-	for (float y = -5.0f; y < 5.0f; y += 0.5f) {
-		for (float x = -5.0f; x < 5.0f; x += 0.5f) {
-			OA_PROFILE_SCOPE("1 Quad");
-			glm::vec3 color = { (x + 5.0f) / 10.0f, 0.3f, (y + 5.0f) / 10.0f };
-			Renderer2D::DrawQuad({ x, y, -0.1f }, { 0.25f, 0.25f }, { color.r, color.g, color.b, 0.6f });
+	for (int i = 0; i < m_MapHeight; i++) {
+		for (int j = 0; j < m_MapWidth; j++) {
+			char tileType = s_MapTiles[j + i * m_MapWidth];
+			Renderer2D::DrawQuad({ 1.0f * j - m_MapWidth/2.0f, 1.0f * i - m_MapHeight/2.0f}, {1.0f, 1.0f}, 0.0f, m_TileMap[tileType], {1.0f, 1.0f, 1.0f, 1.0f});
+
+
 		}
 	}
-
-	Renderer2D::EndScene();
-
-
-	Renderer2D::BeginScene(m_CameraController.GetCamera());
-
-	Renderer2D::DrawQuad({ -1.0f, -0.75f, 0.0f }, { 1,2 }, m_Color);
-	//Renderer2D::DrawQuad({ { 0.5f, -0.75f, 1.0f }, { 1.0f, 1.0f }, angle, m_Texture, m_Color });
-	Renderer2D::DrawQuad({ 0.5f, -0.6f, 0.0f }, { 0.5f, 0.5f }, glm::radians(45.0f), m_Texture, { 1.0f,1.0f,1.0f,1.0f });
-	
-
-	Renderer2D::EndScene();
-
-
-	Renderer2D::BeginScene(m_CameraController.GetCamera());
-	Renderer2D::DrawQuad({ -2.5f, -2.6f, 0.0f }, { 1.0f, 2.0f }, 0.0f, m_SubTexture, { 1.0f,1.0f,1.0f,1.0f });
 	Renderer2D::EndScene();
 
 

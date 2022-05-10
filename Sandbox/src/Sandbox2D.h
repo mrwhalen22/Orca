@@ -28,10 +28,11 @@ private:
 	OrthographicCameraController m_CameraController;
 	Ref<Texture2D> m_Texture;
 	Ref<Texture2D> m_SpriteSheet;
-	Ref<SubTexture2D> m_SubTexture;
 
 	glm::vec4 m_Color = { 0.6, 0.6, 0.6, 1.0 };
 	float angle = 0.0f;
 
+	uint32_t m_MapWidth, m_MapHeight;
+	std::unordered_map<char, Ref<SubTexture2D>> m_TileMap;
 	
 };
