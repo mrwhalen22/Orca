@@ -119,4 +119,8 @@ namespace Orca
 			m_Window->OnUpdate();
 		}
 	}
+
+	void Application::Close() {
+		m_Running = false;
+	}
 }
