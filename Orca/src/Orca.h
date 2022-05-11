@@ -25,6 +25,7 @@
 #include "Orca/Renderer/VertexArray.h"
 #include "Orca/Renderer/Shader.h"
 #include "Orca/Renderer/Texture.h"
+#include "Orca/Renderer/Framebuffer.h"
 #include "Orca/Renderer/SubTexture2D.h"
 #include "Orca/Renderer/OrthographicCamera.h"
 

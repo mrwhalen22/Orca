@@ -140,6 +140,7 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Orca\Platform\OpenGL\OpenGLFramebuffer.h" />
     <ClInclude Include="src\Orca.h" />
     <ClInclude Include="src\Orca\Core\Application.h" />
     <ClInclude Include="src\Orca\Core\Core.h" />
@@ -168,6 +169,7 @@
     <ClInclude Include="src\Orca\Platform\Windows\WindowsInput.h" />
     <ClInclude Include="src\Orca\Platform\Windows\WindowsWindow.h" />
     <ClInclude Include="src\Orca\Renderer\Buffer.h" />
+    <ClInclude Include="src\Orca\Renderer\Framebuffer.h" />
     <ClInclude Include="src\Orca\Renderer\GraphicsContext.h" />
     <ClInclude Include="src\Orca\Renderer\OrthographicCamera.h" />
     <ClInclude Include="src\Orca\Renderer\RenderCommand.h" />
@@ -597,6 +599,7 @@
     <ClInclude Include="vendor\stb_image\stb_image.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Orca\Platform\OpenGL\OpenGLFramebuffer.cpp" />
     <ClCompile Include="src\Orca\Core\Application.cpp" />
     <ClCompile Include="src\Orca\Core\Layer.cpp" />
     <ClCompile Include="src\Orca\Core\LayerStack.cpp" />
@@ -613,6 +616,7 @@
     <ClCompile Include="src\Orca\Platform\Windows\WindowsInput.cpp" />
     <ClCompile Include="src\Orca\Platform\Windows\WindowsWindow.cpp" />
     <ClCompile Include="src\Orca\Renderer\Buffer.cpp" />
+    <ClCompile Include="src\Orca\Renderer\Framebuffer.cpp" />
     <ClCompile Include="src\Orca\Renderer\OrthographicCamera.cpp" />
     <ClCompile Include="src\Orca\Renderer\RenderCommand.cpp" />
     <ClCompile Include="src\Orca\Renderer\Renderer.cpp" />
