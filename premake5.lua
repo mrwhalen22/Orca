@@ -145,3 +145,53 @@ project "Sandbox"
 		defines "OA_DIST"
 		runtime "Release"
 		optimize "on"
+
+
+project "Orca-Editor"
+	location "Orca-Editor"
+	kind "ConsoleApp"
+	language "C++"
+	cppdialect "C++17"
+	
+
+	staticruntime "on"
+
+	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
+	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
+
+	files {
+		"%{prj.name}/src/**.h",
+		"%{prj.name}/src/**.cpp"
+	}
+
+	includedirs {
+		"Orca/vendor/spdlog/include",
+		"Orca/src",
+		"%{IncludeDir.glm}",
+		"Orca/vendor"
+	}
+
+	links {
+		"Orca"
+	}
+
+	filter "system:windows"
+		systemversion "latest"
+		defines {
+			"OA_PLATFORM_WINDOWS",
+		}
+
+	filter "configurations:Debug"
+		defines "OA_DEBUG"
+		runtime "Debug"
+		symbols "on"
+
+	filter "configurations:Release"
+		defines "OA_RELEASE"
+		runtime "Release"
+		optimize "on"
+
+	filter "configurations:Dist"
+		defines "OA_DIST"
+		runtime "Release"
+		optimize "on"

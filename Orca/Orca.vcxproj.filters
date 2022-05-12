@@ -10,6 +10,9 @@
     <Filter Include="src\Orca\Core">
       <UniqueIdentifier>{F99F1104-6560-8D3A-2E9B-D6B79A1AD216}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Orca\Debug">
+      <UniqueIdentifier>{37FA5186-23C8-458C-0C5C-B6B2F8C821F1}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src\Orca\Events">
       <UniqueIdentifier>{C5931B54-311F-8918-3A30-0C0DA63AE518}</UniqueIdentifier>
     </Filter>
@@ -90,6 +93,9 @@
     <ClInclude Include="src\Orca\Core\Window.h">
       <Filter>src\Orca\Core</Filter>
     </ClInclude>
+    <ClInclude Include="src\Orca\Debug\Instrumentor.h">
+      <Filter>src\Orca\Debug</Filter>
+    </ClInclude>
     <ClInclude Include="src\Orca\Events\ApplicationEvent.h">
       <Filter>src\Orca\Events</Filter>
     </ClInclude>
@@ -114,6 +120,9 @@
     <ClInclude Include="src\Orca\Platform\OpenGL\OpenGLContext.h">
       <Filter>src\Orca\Platform\OpenGL</Filter>
     </ClInclude>
+    <ClInclude Include="src\Orca\Platform\OpenGL\OpenGLFramebuffer.h">
+      <Filter>src\Orca\Platform\OpenGL</Filter>
+    </ClInclude>
     <ClInclude Include="src\Orca\Platform\OpenGL\OpenGLRendererAPI.h">
       <Filter>src\Orca\Platform\OpenGL</Filter>
     </ClInclude>
@@ -135,6 +144,9 @@
     <ClInclude Include="src\Orca\Renderer\Buffer.h">
       <Filter>src\Orca\Renderer</Filter>
     </ClInclude>
+    <ClInclude Include="src\Orca\Renderer\Framebuffer.h">
+      <Filter>src\Orca\Renderer</Filter>
+    </ClInclude>
     <ClInclude Include="src\Orca\Renderer\GraphicsContext.h">
       <Filter>src\Orca\Renderer</Filter>
     </ClInclude>
@@ -147,10 +159,16 @@
     <ClInclude Include="src\Orca\Renderer\Renderer.h">
       <Filter>src\Orca\Renderer</Filter>
     </ClInclude>
+    <ClInclude Include="src\Orca\Renderer\Renderer2D.h">
+      <Filter>src\Orca\Renderer</Filter>
+    </ClInclude>
     <ClInclude Include="src\Orca\Renderer\RendererAPI.h">
       <Filter>src\Orca\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\Orca\Renderer\Shader.h">
+      <Filter>src\Orca\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Orca\Renderer\SubTexture2D.h">
       <Filter>src\Orca\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\Orca\Renderer\Texture.h">
@@ -1410,11 +1428,6 @@
     <ClInclude Include="vendor\stb_image\stb_image.h">
       <Filter>vendor\stb_image</Filter>
     </ClInclude>
-    <ClInclude Include="src\Orca\Renderer\Renderer2D.h" />
-    <ClInclude Include="src\Orca\Debug\Instrumentor.h" />
-    <ClInclude Include="src\Orca\Renderer\SubTexture2D.h" />
-    <ClInclude Include="src\Orca\Renderer\Framebuffer.h" />
-    <ClInclude Include="src\Orca\Platform\OpenGL\OpenGLFramebuffer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Orca\Core\Application.cpp">
@@ -1444,6 +1457,9 @@
     <ClCompile Include="src\Orca\Platform\OpenGL\OpenGLContext.cpp">
       <Filter>src\Orca\Platform\OpenGL</Filter>
     </ClCompile>
+    <ClCompile Include="src\Orca\Platform\OpenGL\OpenGLFramebuffer.cpp">
+      <Filter>src\Orca\Platform\OpenGL</Filter>
+    </ClCompile>
     <ClCompile Include="src\Orca\Platform\OpenGL\OpenGLRendererAPI.cpp">
       <Filter>src\Orca\Platform\OpenGL</Filter>
     </ClCompile>
@@ -1465,6 +1481,9 @@
     <ClCompile Include="src\Orca\Renderer\Buffer.cpp">
       <Filter>src\Orca\Renderer</Filter>
     </ClCompile>
+    <ClCompile Include="src\Orca\Renderer\Framebuffer.cpp">
+      <Filter>src\Orca\Renderer</Filter>
+    </ClCompile>
     <ClCompile Include="src\Orca\Renderer\OrthographicCamera.cpp">
       <Filter>src\Orca\Renderer</Filter>
     </ClCompile>
@@ -1474,10 +1493,16 @@
     <ClCompile Include="src\Orca\Renderer\Renderer.cpp">
       <Filter>src\Orca\Renderer</Filter>
     </ClCompile>
+    <ClCompile Include="src\Orca\Renderer\Renderer2D.cpp">
+      <Filter>src\Orca\Renderer</Filter>
+    </ClCompile>
     <ClCompile Include="src\Orca\Renderer\RendererAPI.cpp">
       <Filter>src\Orca\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\Orca\Renderer\Shader.cpp">
+      <Filter>src\Orca\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Orca\Renderer\SubTexture2D.cpp">
       <Filter>src\Orca\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\Orca\Renderer\Texture.cpp">
@@ -1492,9 +1517,5 @@
     <ClCompile Include="vendor\stb_image\stb_image.cpp">
       <Filter>vendor\stb_image</Filter>
     </ClCompile>
-    <ClCompile Include="src\Orca\Renderer\Renderer2D.cpp" />
-    <ClCompile Include="src\Orca\Renderer\SubTexture2D.cpp" />
-    <ClCompile Include="src\Orca\Renderer\Framebuffer.cpp" />
-    <ClCompile Include="src\Orca\Platform\OpenGL\OpenGLFramebuffer.cpp" />
   </ItemGroup>
 </Project>

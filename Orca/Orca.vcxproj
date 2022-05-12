@@ -140,13 +140,11 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\Orca\Platform\OpenGL\OpenGLFramebuffer.h" />
     <ClInclude Include="src\Orca.h" />
     <ClInclude Include="src\Orca\Core\Application.h" />
     <ClInclude Include="src\Orca\Core\Core.h" />
     <ClInclude Include="src\Orca\Core\EntryPoint.h" />
     <ClInclude Include="src\Orca\Core\Input.h" />
-    <ClInclude Include="src\Orca\Debug\Instrumentor.h" />
     <ClInclude Include="src\Orca\Core\KeyCodes.h" />
     <ClInclude Include="src\Orca\Core\Layer.h" />
     <ClInclude Include="src\Orca\Core\LayerStack.h" />
@@ -154,6 +152,7 @@
     <ClInclude Include="src\Orca\Core\MouseButtonCodes.h" />
     <ClInclude Include="src\Orca\Core\Timestep.h" />
     <ClInclude Include="src\Orca\Core\Window.h" />
+    <ClInclude Include="src\Orca\Debug\Instrumentor.h" />
     <ClInclude Include="src\Orca\Events\ApplicationEvent.h" />
     <ClInclude Include="src\Orca\Events\Event.h" />
     <ClInclude Include="src\Orca\Events\KeyEvent.h" />
@@ -162,6 +161,7 @@
     <ClInclude Include="src\Orca\OrthographicCameraController.h" />
     <ClInclude Include="src\Orca\Platform\OpenGL\OpenGLBuffer.h" />
     <ClInclude Include="src\Orca\Platform\OpenGL\OpenGLContext.h" />
+    <ClInclude Include="src\Orca\Platform\OpenGL\OpenGLFramebuffer.h" />
     <ClInclude Include="src\Orca\Platform\OpenGL\OpenGLRendererAPI.h" />
     <ClInclude Include="src\Orca\Platform\OpenGL\OpenGLShader.h" />
     <ClInclude Include="src\Orca\Platform\OpenGL\OpenGLTexture.h" />
@@ -599,7 +599,6 @@
     <ClInclude Include="vendor\stb_image\stb_image.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Orca\Platform\OpenGL\OpenGLFramebuffer.cpp" />
     <ClCompile Include="src\Orca\Core\Application.cpp" />
     <ClCompile Include="src\Orca\Core\Layer.cpp" />
     <ClCompile Include="src\Orca\Core\LayerStack.cpp" />
@@ -609,6 +608,7 @@
     <ClCompile Include="src\Orca\OrthographicCameraController.cpp" />
     <ClCompile Include="src\Orca\Platform\OpenGL\OpenGLBuffer.cpp" />
     <ClCompile Include="src\Orca\Platform\OpenGL\OpenGLContext.cpp" />
+    <ClCompile Include="src\Orca\Platform\OpenGL\OpenGLFramebuffer.cpp" />
     <ClCompile Include="src\Orca\Platform\OpenGL\OpenGLRendererAPI.cpp" />
     <ClCompile Include="src\Orca\Platform\OpenGL\OpenGLShader.cpp" />
     <ClCompile Include="src\Orca\Platform\OpenGL\OpenGLTexture.cpp" />

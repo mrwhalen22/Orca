@@ -17,9 +17,9 @@ namespace Orca {
 	void OrthographicCameraController::OnUpdate(Timestep ts) {
 		OA_PROFILE_FUNCTION();
 		if (Input::IsKeyPressed(OA_KEY_W)) 
-			m_CameraPosition.y -= m_CameraTranslationSpeed * ts;
-		else if (Input::IsKeyPressed(OA_KEY_S)) 
 			m_CameraPosition.y += m_CameraTranslationSpeed * ts;
+		else if (Input::IsKeyPressed(OA_KEY_S)) 
+			m_CameraPosition.y -= m_CameraTranslationSpeed * ts;
 
 		if (Input::IsKeyPressed(OA_KEY_D)) 
 			m_CameraPosition.x += m_CameraTranslationSpeed * ts;

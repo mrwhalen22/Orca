@@ -16,13 +16,13 @@ namespace Orca
 	// Define Application Singleton IE: Only one object instance of Application
 	Application* Application::s_Instance = nullptr;
 
-	Application::Application()
+	Application::Application(const std::string& name, uint32_t width, uint32_t height)
 	{	
 		OA_PROFILE_FUNCTION();
 
 		// init the singleton and the window
 		s_Instance = this;
-		m_Window = Scope<Window>(Window::Create());
+		m_Window = Scope<Window>(Window::Create(WindowProps(name, width, height)));
 		m_Window->SetEventCallback(OA_BIND_EVENT_FN(Application::OnEvent));
 
 		// init renderer and imgui

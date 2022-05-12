@@ -35,7 +35,7 @@ namespace Orca {
 
 		struct WindowData {
 			std::string Title;
-			unsigned int Width = 0, Height = 0;
+			uint32_t Width = 0, Height = 0;
 			bool VSync = false;
 
 			EventCallbackFn EventCallback;

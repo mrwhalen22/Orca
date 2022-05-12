@@ -13,6 +13,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "imgui", "Orca\vendor\imgui\
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Orca", "Orca\Orca.vcxproj", "{8A538A7C-768A-8B0D-1F77-71100B8D070F}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Orca-Editor", "Orca-Editor\Orca-Editor.vcxproj", "{FE7709A1-6A2D-8296-F321-7C6D5FD6789A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -50,6 +52,12 @@ Global
 		{8A538A7C-768A-8B0D-1F77-71100B8D070F}.Dist|x64.Build.0 = Dist|x64
 		{8A538A7C-768A-8B0D-1F77-71100B8D070F}.Release|x64.ActiveCfg = Release|x64
 		{8A538A7C-768A-8B0D-1F77-71100B8D070F}.Release|x64.Build.0 = Release|x64
+		{FE7709A1-6A2D-8296-F321-7C6D5FD6789A}.Debug|x64.ActiveCfg = Debug|x64
+		{FE7709A1-6A2D-8296-F321-7C6D5FD6789A}.Debug|x64.Build.0 = Debug|x64
+		{FE7709A1-6A2D-8296-F321-7C6D5FD6789A}.Dist|x64.ActiveCfg = Dist|x64
+		{FE7709A1-6A2D-8296-F321-7C6D5FD6789A}.Dist|x64.Build.0 = Dist|x64
+		{FE7709A1-6A2D-8296-F321-7C6D5FD6789A}.Release|x64.ActiveCfg = Release|x64
+		{FE7709A1-6A2D-8296-F321-7C6D5FD6789A}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
