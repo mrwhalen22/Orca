@@ -130,7 +130,7 @@ namespace Orca {
 
             ImGui::EndMenuBar();
         }
-
+        ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0.0f, 0.0f });
         ImGui::Begin("Settings");
         ImGui::Text("Renderer2D Stats:");
         ImGui::Text("Draw Calls: %d", stats.DrawCalls);
@@ -138,10 +138,26 @@ namespace Orca {
         ImGui::Text("Vertices: %d", stats.GetTotalVertexCount());
         ImGui::Text("Indices: %d", stats.GetTotalIndexCount());
         ImGui::ColorEdit4("Color", glm::value_ptr(m_Color));
-        uint32_t TextureID = m_Framebuffer->GetColorAttachmentRendererID();
-        ImGui::Image((void*)TextureID, ImVec2{ 1280, 720 }, ImVec2{0,1}, ImVec2{1,0});
         ImGui::End();
 
+        
+        ImGui::Begin("Viewport");
+        
+
+        ImVec2 viewportSize = ImGui::GetContentRegionAvail();
+        if (m_ViewportSize != *((glm::vec2*)&viewportSize)) {
+            m_ViewportSize = { viewportSize.x, viewportSize.y };
+            m_Framebuffer->Resize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
+            m_CameraController.OnResize(m_ViewportSize.x, m_ViewportSize.y);
+        }
+        uint32_t TextureID = m_Framebuffer->GetColorAttachmentRendererID();
+        ImGui::Image((void*)TextureID, ImVec2{ m_ViewportSize.x, m_ViewportSize.y }, ImVec2{ 0,1 }, ImVec2{ 1,0 });
+        
+        
+        ImGui::End();
+        ImGui::PopStyleVar();
+
+      
 
         ImGui::End();
     }

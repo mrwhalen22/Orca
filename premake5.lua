@@ -9,7 +9,7 @@ workspace "Orca"
 		"Dist"
 	}
 
-	startproject "Sandbox"
+	startproject "Orca-Editor"
 
 
 -- Defines the main output dir for files in Hazel/.../bin and Hazel/.../bin-int

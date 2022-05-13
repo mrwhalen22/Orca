@@ -46,6 +46,12 @@ namespace Orca {
 		m_Camera.SetProjection(-m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel);
 	}
 
+	void OrthographicCameraController::OnResize(float width, float height) {
+		OA_PROFILE_FUNCTION();
+		m_AspectRatio = width / height;
+		CalculateView();
+	}
+
 	void OrthographicCameraController::OnEvent(Event& e) {
 		OA_PROFILE_FUNCTION();
 		EventDispatcher dispatcher(e);
@@ -65,8 +71,7 @@ namespace Orca {
 
 	bool OrthographicCameraController::OnWindowResized(WindowResizeEvent& e) {
 		OA_PROFILE_FUNCTION();
-		m_AspectRatio = (float)e.GetWidth() / (float)e.GetHeight();
-		CalculateView();
+		OnResize((float)e.GetWidth(), (float)e.GetHeight());
 		return true;
 	}
 

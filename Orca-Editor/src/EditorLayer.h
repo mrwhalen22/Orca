@@ -28,6 +28,8 @@ namespace Orca {
 		Ref<Texture2D> m_SpriteSheet;
 		Ref<Framebuffer> m_Framebuffer;
 
+		glm::vec2 m_ViewportSize;
+
 		glm::vec4 m_Color = { 0.6, 0.6, 0.6, 1.0 };
 		float angle = 0.0f;
 
