@@ -135,9 +135,6 @@
     <ClInclude Include="src\Orca\Platform\OpenGL\OpenGLVertexArray.h">
       <Filter>src\Orca\Platform\OpenGL</Filter>
     </ClInclude>
-    <ClInclude Include="src\Orca\Platform\Windows\WindowsInput.h">
-      <Filter>src\Orca\Platform\Windows</Filter>
-    </ClInclude>
     <ClInclude Include="src\Orca\Platform\Windows\WindowsWindow.h">
       <Filter>src\Orca\Platform\Windows</Filter>
     </ClInclude>

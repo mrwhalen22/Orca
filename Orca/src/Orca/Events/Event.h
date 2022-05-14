@@ -35,6 +35,7 @@ namespace Orca {
 	class Event {
 		friend class EventDispatcher;
 	public:
+		virtual ~Event() = default;
 		virtual EventType GetEventType() const = 0;
 		virtual const char* GetName() const = 0;
 		virtual int GetCategoryFlags() const = 0;
@@ -44,10 +45,9 @@ namespace Orca {
 			return GetCategoryFlags() & category;
 		}
 
-		inline bool IsHandled() const { return m_Handled; }
 
-	protected:
-		bool m_Handled = false;
+	public:
+		bool Handled = false;
 
 	};
 
@@ -63,7 +63,7 @@ namespace Orca {
 		bool Dispatch(EventFn<T> func) {
 			//runs the associated event function if the event matches the type of the event passed into the template
 			if (m_Event.GetEventType() == T::GetStaticType()) {
-				m_Event.m_Handled = func(*(T*)&m_Event); // this somehow executes the func pointer no clue how yet
+				m_Event.Handled = func(*(T*)&m_Event); // this somehow executes the func pointer no clue how yet
 				return true;
 			}
 			return false;

@@ -166,7 +166,6 @@
     <ClInclude Include="src\Orca\Platform\OpenGL\OpenGLShader.h" />
     <ClInclude Include="src\Orca\Platform\OpenGL\OpenGLTexture.h" />
     <ClInclude Include="src\Orca\Platform\OpenGL\OpenGLVertexArray.h" />
-    <ClInclude Include="src\Orca\Platform\Windows\WindowsInput.h" />
     <ClInclude Include="src\Orca\Platform\Windows\WindowsWindow.h" />
     <ClInclude Include="src\Orca\Renderer\Buffer.h" />
     <ClInclude Include="src\Orca\Renderer\Framebuffer.h" />

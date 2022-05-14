@@ -29,8 +29,10 @@ namespace Orca {
 		Ref<Framebuffer> m_Framebuffer;
 
 		glm::vec2 m_ViewportSize;
-
-		glm::vec4 m_Color = { 0.6, 0.6, 0.6, 1.0 };
+		float m_FPS;
+		bool m_ViewportFocused = false;
+		bool m_ViewportHovered = false;
+		glm::vec4 m_Color = { 1.0f, 1.0f, 1.0f, 1.0f };
 		float angle = 0.0f;
 
 		uint32_t m_MapWidth, m_MapHeight;

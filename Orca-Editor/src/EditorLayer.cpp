@@ -54,8 +54,11 @@ namespace Orca {
         OA_PROFILE_FUNCTION();
         //angle += 1*ts;
 
+       m_FPS = 1.0f/ts.GetSeconds();
+
         Renderer2D::ResetStats();
-        m_CameraController.OnUpdate(ts);
+        if(m_ViewportFocused)
+            m_CameraController.OnUpdate(ts);
 
         m_Framebuffer->Bind();
         RenderCommand::Clear();
@@ -66,7 +69,7 @@ namespace Orca {
         for (int i = 0; i < m_MapHeight; i++) {
             for (int j = 0; j < m_MapWidth; j++) {
                 char tileType = s_MapTiles[j + i * m_MapWidth];
-                Renderer2D::DrawQuad({ 0.5f * j - m_MapWidth / 2.0f, 0.5f * i - m_MapHeight / 2.0f }, { 0.5f, 0.5f }, 0.0f, m_TileMap[tileType], { 1.0f, 1.0f, 1.0f, 1.0f });
+                Renderer2D::DrawQuad({ 0.5f * j - m_MapWidth / 4.0f, 0.5f * i - m_MapHeight / 4.0f }, { 0.5f, 0.5f }, 0.0f, m_TileMap[tileType], m_Color);
 
             }
         }
@@ -137,11 +140,17 @@ namespace Orca {
         ImGui::Text("Quads: %d", stats.QuadCount);
         ImGui::Text("Vertices: %d", stats.GetTotalVertexCount());
         ImGui::Text("Indices: %d", stats.GetTotalIndexCount());
+        ImGui::Text("FPS: %.3f", m_FPS);
         ImGui::ColorEdit4("Color", glm::value_ptr(m_Color));
         ImGui::End();
 
         
         ImGui::Begin("Viewport");
+        
+        // Blocks events to the ImGuiLayer if the viewport is not focused or hovered.
+        m_ViewportFocused = ImGui::IsWindowFocused();
+        m_ViewportHovered = ImGui::IsWindowHovered();
+        Application::Get().GetImGuiLayer()->SetBlockEvents(!m_ViewportFocused || !m_ViewportHovered);
         
 
         ImVec2 viewportSize = ImGui::GetContentRegionAvail();

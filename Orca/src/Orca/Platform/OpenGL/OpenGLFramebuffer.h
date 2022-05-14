@@ -6,7 +6,7 @@ namespace Orca {
 	{
 	public:
 		OpenGLFramebuffer(const FramebufferSpecification& spec);
-		~OpenGLFramebuffer();
+		~OpenGLFramebuffer() override;
 
 		virtual void Bind() override;
 		virtual void Unbind() override;

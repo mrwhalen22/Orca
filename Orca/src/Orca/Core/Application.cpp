@@ -60,9 +60,9 @@ namespace Orca
 		// pass the event to each layer in the stack
 		for (auto it = m_LayerStack.end(); it != m_LayerStack.begin();)
 		{
-			(*--it)->OnEvent(e);
-			if (e.IsHandled())
+			if (e.Handled)
 				break;
+			(*--it)->OnEvent(e);
 		}
 	}
 
